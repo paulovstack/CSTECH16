@@ -1,0 +1,226 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>CSTECH16 | Funcionários</title>
+
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+
+    <div class="app-shell">
+
+        <!-- Menu lateral -->
+        <aside class="sidebar">
+
+            <a class="side-brand" href="/static/dashboard.html">
+                <span class="brand-mark small">CS</span>
+                <span>CSTECH16</span>
+            </a>
+
+            <!-- Navegação -->
+            <nav>
+                <a href="/static/dashboard.html">
+                    ▦ Dashboard
+                </a>
+
+                <a href="/static/produtos.html">
+                    ▣ Produtos
+                </a>
+
+                <a
+                    class="active"
+                    href="/static/funcionarios.html"
+                >
+                    ♙ Funcionários
+                </a>
+            </nav>
+
+            <!-- Encerrar sessão -->
+            <button
+                class="btn ghost full"
+                type="button"
+                data-logout
+            >
+                Sair da conta
+            </button>
+
+        </aside>
+
+        <!-- Conteúdo principal -->
+        <main class="main-content">
+
+            <!-- Cabeçalho -->
+            <header class="topbar">
+
+                <div>
+                    <p class="eyebrow">ADMINISTRAÇÃO</p>
+
+                    <h1>Funcionários</h1>
+
+                    <p class="muted">
+                        Cadastre e consulte os funcionários autorizados.
+                    </p>
+                </div>
+
+                <a
+                    class="btn secondary"
+                    href="/static/dashboard.html"
+                >
+                    ← Dashboard
+                </a>
+
+            </header>
+
+            <!-- Formulário de cadastro -->
+            <section class="panel">
+
+                <div class="panel-heading">
+
+                    <div>
+                        <h2>Novo funcionário</h2>
+
+                        <p class="muted">
+                            Somente administradores
+                            devem acessar esta área.
+                        </p>
+                    </div>
+
+                </div>
+
+                <form
+                    id="funcionario-form"
+                    class="form-grid"
+                >
+
+                    <!-- Nome -->
+                    <div>
+                        <label for="f-nome">Nome</label>
+
+                        <input
+                            id="f-nome"
+                            name="nome"
+                            type="text"
+                            required
+                            autocomplete="name"
+                        >
+                    </div>
+
+                    <!-- E-mail -->
+                    <div>
+                        <label for="f-email">E-mail</label>
+
+                        <input
+                            id="f-email"
+                            name="email"
+                            type="email"
+                            required
+                            autocomplete="email"
+                        >
+                    </div>
+
+                    <!-- Senha temporária -->
+                    <div class="span-2">
+
+                        <label for="f-senha">
+                            Senha temporária
+                        </label>
+
+                        <input
+                            id="f-senha"
+                            name="senha"
+                            type="password"
+                            required
+                            minlength="8"
+                            autocomplete="new-password"
+                        >
+
+                        <small>
+                            A senha deve ter pelo menos 8 caracteres.
+                        </small>
+
+                    </div>
+
+                    <!-- Status do funcionário -->
+                    <div>
+                        <label for="f-status">Status</label>
+                        <select id="f-status" name="status" required>
+                            <option value="true" selected>Ativo</option>
+                            <option value="false">Inativo</option>
+                        </select>
+                    </div>
+
+                    <!-- Botão e mensagem -->
+                    <div class="span-2">
+
+                        <button
+                            class="btn primary"
+                            type="submit"
+                        >
+                            Cadastrar funcionário
+                        </button>
+
+                        <p
+                            id="funcionario-message"
+                            class="message"
+                            role="status"
+                        ></p>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+            <section class="panel" id="employee-edit-panel" hidden><h2>Editar funcionário</h2><form id="employee-edit-form" class="form-grid"><div><label for="edit-nome">Nome</label><input id="edit-nome" name="nome" required></div><div><label for="edit-email">E-mail</label><input id="edit-email" name="email" type="email" required></div><div><label for="edit-status">Status</label><select id="edit-status" name="status"><option value="true">Ativo</option><option value="false">Inativo</option></select></div><div class="span-2"><button class="btn primary" type="submit">Salvar alterações</button> <button class="btn secondary" type="button" id="employee-cancel">Cancelar</button><p id="employee-edit-message" class="message"></p></div></form></section><!-- Lista de funcionários -->
+            <section class="panel">
+
+                <div class="panel-heading">
+
+                    <div>
+                        <h2>Funcionários cadastrados</h2>
+
+                        <p class="muted">
+                            Dados retornados pela API.
+                        </p>
+                    </div>
+
+                    <button
+                        id="refresh-employees"
+                        class="btn secondary"
+                        type="button"
+                    >
+                        Atualizar lista
+                    </button>
+
+                </div>
+
+                <!-- Conteúdo carregado pelo JavaScript -->
+                <div
+                    id="employees-content"
+                    class="table-wrap"
+                >
+                    <p class="muted">
+                        Carregando funcionários...
+                    </p>
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- Script principal da aplicação -->
+    <script src="/static/js/app.js"></script>
+
+    <!-- Script de cadastro e consulta de funcionários -->
+    <script src="/static/js/funcionarios.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>CSTECH16 | Entrar</title>
+
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body class="auth-page">
+
+    <main class="auth-card">
+
+        <!-- Identidade visual -->
+        <div class="brand-mark">CS</div>
+
+        <p class="eyebrow">CSTECH16</p>
+
+        <!-- Apresentação -->
+        <h1>Bem-vindo(a)</h1>
+
+        <p class="muted">
+            Entre na sua conta para continuar.
+        </p>
+
+        <!-- Formulário de login -->
+        <form id="login-form">
+
+            <!-- E-mail -->
+            <label for="email">E-mail</label>
+
+            <input
+                id="email"
+                name="username"
+                type="email"
+                autocomplete="username"
+                required
+                placeholder="voce@exemplo.com"
+            >
+
+            <!-- Senha -->
+            <label for="senha">Senha</label>
+
+            <input
+                id="senha"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                required
+                placeholder="Sua senha"
+            >
+
+            <!-- Botão de acesso -->
+            <button
+                type="submit"
+                class="btn primary full"
+            >
+                Entrar
+            </button>
+
+            <!-- Mensagem de retorno -->
+            <p
+                id="login-message"
+                class="message"
+                role="status"
+            ></p>
+
+        </form>
+
+        <!-- Link para cadastro -->
+        <p class="auth-foot">
+            Ainda não tem conta?
+            <a href="/static/cliente.html">Cadastre-se</a>
+        </p>
+
+    </main>
+
+    <!-- Script responsável pela autenticação -->
+    <script src="/static/js/app.js"></script>
+
+</body>
+</html>

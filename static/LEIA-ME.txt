@@ -1,0 +1,13 @@
+CSTECH16 — VITRINE PÚBLICA E CARRINHO
+
+1. Copie o conteúdo da pasta static deste pacote para a pasta static do projeto FastAPI.
+2. Loja pública: http://127.0.0.1:8000/static/loja.html
+3. Para abrir a loja ao acessar http://127.0.0.1:8000/ altere a rota GET / em main.py para FileResponse("static/loja.html").
+   ATENÇÃO: não crie uma segunda rota GET /; substitua a existente que abre o login.
+4. O login continua em /static/index.html.
+5. O carrinho persiste em localStorage, permite adicionar, aumentar, diminuir e remover itens e calcula total.
+6. Ao clicar Finalizar compra sem login, a pessoa é enviada ao login e retorna à loja com carrinho preservado.
+7. Com login, a interface informa que ainda falta uma rota de pedidos/compras na API. Nenhuma compra real é criada nem o estoque é alterado.
+8. Produtos são consultados em GET /api/v1/produtos/ sem exigir token.
+9. Para checkout real será necessário desenvolver endpoint POST de pedidos no backend com validação de token, preço e estoque no servidor.
+10. Se o projeto usa rota de login diferente, ajuste /static/index.html nos links.

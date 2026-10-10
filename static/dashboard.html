@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>CSTECH16 | Dashboard</title>
+
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+
+    <div class="app-shell">
+
+        <!-- Menu lateral -->
+        <aside class="sidebar">
+
+            <a class="side-brand" href="/static/dashboard.html">
+                <span class="brand-mark small">CS</span>
+                <span>CSTECH16</span>
+            </a>
+
+            <!-- Navegação principal -->
+            <nav>
+                <a class="active" href="/static/dashboard.html">
+                    ▦ Dashboard
+                </a>
+
+                <a href="/static/produtos.html">
+                    ▣ Produtos
+                </a>
+
+                <a
+                    href="/static/funcionarios.html"
+                    id="employee-nav"
+                >
+                    ♙ Funcionários
+                </a>
+            </nav>
+
+            <!-- Sair da conta -->
+            <button
+                id="logout-button"
+                class="btn ghost full"
+                type="button"
+            >
+                Sair da conta
+            </button>
+
+        </aside>
+
+        <!-- Conteúdo principal -->
+        <main class="main-content">
+
+            <!-- Cabeçalho -->
+            <header class="topbar">
+
+                <div>
+                    <p class="eyebrow">VISÃO GERAL</p>
+                    <h1>Dashboard</h1>
+                </div>
+
+                <div class="user-chip" id="user-chip">
+                    Carregando...
+                </div>
+
+            </header>
+
+            <!-- Painel de boas-vindas -->
+            <section class="welcome-panel">
+
+                <div>
+                    <p class="eyebrow light">
+                        ÁREA DO USUÁRIO
+                    </p>
+
+                    <h2 id="welcome-title">Olá!</h2>
+
+                    <p>
+                        Gerencie produtos e, como administrador, os funcionários da CSTech.
+                    </p>
+                </div>
+
+                <div class="welcome-icon">✦</div>
+
+            </section>
+
+            <!-- Atalhos das áreas do sistema -->
+            <section class="stats-grid">
+
+                <!-- Produtos -->
+                <article class="stat-card">
+
+                    <span class="stat-icon blue">▣</span>
+
+                    <p>Produtos</p>
+
+                    <strong>Catálogo</strong>
+
+                    <a href="/static/produtos.html">
+                        Acessar →
+                    </a>
+
+                </article>
+
+                <!-- Funcionários -->
+                <article class="stat-card" id="employee-card">
+
+                    <span class="stat-icon green">♙</span>
+
+                    <p>Equipe</p>
+
+                    <strong>Funcionários</strong>
+
+                    <a href="/static/funcionarios.html">
+                        Acessar →
+                    </a>
+
+                </article>
+
+            </section>
+
+            <!-- Painel de acesso rápido -->
+            <section class="panel">
+
+                <div class="panel-heading">
+
+                    <div>
+                        <h2>Bem-vindo ao CSTECH16</h2>
+
+                        <p class="muted">
+                            Selecione uma área para continuar.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="quick-links">
+
+                    <a href="/static/produtos.html">
+                        Explorar produtos
+                        <span>→</span>
+                    </a>
+
+                    <a
+                        href="/static/funcionarios.html"
+                        id="employee-link"
+                    >
+                        Gerenciar funcionários
+                        <span>→</span>
+                    </a>
+
+                </div>
+
+            </section>
+
+            <!-- Mensagens do sistema -->
+            <p
+                id="dashboard-message"
+                class="message"
+                role="status"
+            ></p>
+
+        </main>
+
+    </div>
+
+    <!-- Script do Dashboard -->
+    <script src="/static/js/dashboard.js"></script>
+
+</body>
+</html>
