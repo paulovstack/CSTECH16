@@ -2,6 +2,7 @@
 import logging
 import hashlib
 import secrets
+import re
 
 from datetime import datetime, timedelta
 
@@ -36,6 +37,61 @@ router = APIRouter(
 )
 
 
+# ==========================================================
+# VALIDAÇÃO RIGOROSA DE CPF
+# ==========================================================
+
+def limpar_cpf(cpf: str) -> str:
+    """Remove pontos, traços e outros caracteres não numéricos."""
+    return re.sub(r"\D", "", str(cpf))
+
+
+def validar_cpf(cpf: str) -> bool:
+    """
+    Valida o CPF verificando:
+    - Quantidade de dígitos;
+    - Sequências repetidas;
+    - Primeiro dígito verificador;
+    - Segundo dígito verificador.
+    """
+
+    cpf = limpar_cpf(cpf)
+
+    if not re.fullmatch(r"\d{11}", cpf):
+        return False
+
+    # Rejeita CPFs com todos os dígitos iguais.
+    if cpf == cpf[0] * 11:
+        return False
+
+    # Calcula o primeiro dígito verificador.
+    soma = sum(
+        int(cpf[i]) * (10 - i)
+        for i in range(9)
+    )
+
+    resto = (soma * 10) % 11
+    digito1 = 0 if resto == 10 else resto
+
+    if digito1 != int(cpf[9]):
+        return False
+
+    # Calcula o segundo dígito verificador.
+    soma = sum(
+        int(cpf[i]) * (11 - i)
+        for i in range(10)
+    )
+
+    resto = (soma * 10) % 11
+    digito2 = 0 if resto == 10 else resto
+
+    return digito2 == int(cpf[10])
+
+
+# ==========================================================
+# VERIFICAR DISPONIBILIDADE DE E-MAIL
+# ==========================================================
+
 @router.get("/verificar-email")
 def verificar_disponibilidade_email(
     email: str = Query(..., min_length=5, max_length=254),
@@ -44,6 +100,8 @@ def verificar_disponibilidade_email(
     cursor = None
 
     try:
+        email = email.strip()
+
         conexao = conectar_banco()
         cursor = conexao.cursor(dictionary=True)
 
@@ -54,7 +112,7 @@ def verificar_disponibilidade_email(
             WHERE email = %s
             LIMIT 1
             """,
-            (email.strip(),),
+            (email,),
         )
 
         if cursor.fetchone():
@@ -70,7 +128,7 @@ def verificar_disponibilidade_email(
             WHERE email = %s
             LIMIT 1
             """,
-            (email.strip(),),
+            (email,),
         )
 
         if cursor.fetchone():
@@ -100,6 +158,10 @@ def verificar_disponibilidade_email(
             conexao.close()
 
 
+# ==========================================================
+# REGISTRAR CLIENTE
+# ==========================================================
+
 @router.post(
     "/registrar",
     response_model=UsuarioOut,
@@ -110,22 +172,36 @@ def registrar_usuario(usuario_in: UsuarioCriar):
     cursor = None
 
     try:
+        # Normaliza e valida o CPF antes de qualquer operação no banco.
+        cpf = limpar_cpf(usuario_in.cpf)
+
+        if not validar_cpf(cpf):
+            raise HTTPException(
+                status_code=422,
+                detail="CPF inválido. Verifique os números e os dígitos verificadores.",
+            )
+
+        email = str(usuario_in.email).strip()
+
         conexao = conectar_banco()
         cursor = conexao.cursor(dictionary=True)
 
+        # Verifica CPF ou e-mail já cadastrados.
         cursor.execute(
             """
             SELECT cpf, email
             FROM clientes
             WHERE cpf = %s OR email = %s
             """,
-            (usuario_in.cpf, str(usuario_in.email)),
+            (cpf, email),
         )
 
         existente = cursor.fetchone()
 
         if existente:
-            if existente["cpf"] == usuario_in.cpf:
+            cpf_existente = limpar_cpf(existente["cpf"])
+
+            if cpf_existente == cpf:
                 raise HTTPException(
                     status_code=400,
                     detail="CPF já cadastrado.",
@@ -136,13 +212,14 @@ def registrar_usuario(usuario_in: UsuarioCriar):
                 detail="E-mail já cadastrado.",
             )
 
+        # Verifica se o e-mail pertence a um funcionário.
         cursor.execute(
             """
             SELECT email
             FROM funcionario
             WHERE email = %s
             """,
-            (str(usuario_in.email),),
+            (email,),
         )
 
         if cursor.fetchone():
@@ -164,10 +241,10 @@ def registrar_usuario(usuario_in: UsuarioCriar):
             VALUES (%s, %s, %s, %s, %s, %s)
             """,
             (
-                usuario_in.cpf,
-                usuario_in.nome,
+                cpf,
+                usuario_in.nome.strip(),
                 usuario_in.telefone,
-                str(usuario_in.email),
+                email,
                 senha_hash,
                 status_ativo,
             ),
@@ -176,10 +253,10 @@ def registrar_usuario(usuario_in: UsuarioCriar):
         conexao.commit()
 
         return UsuarioOut(
-            id=usuario_in.cpf,
-            nome=usuario_in.nome,
+            id=cpf,
+            nome=usuario_in.nome.strip(),
             telefone=usuario_in.telefone,
-            email=usuario_in.email,
+            email=email,
             perfil="CLIENTE",
             status=status_ativo,
         )
@@ -207,6 +284,10 @@ def registrar_usuario(usuario_in: UsuarioCriar):
         if conexao is not None and conexao.is_connected():
             conexao.close()
 
+
+# ==========================================================
+# LOGIN
+# ==========================================================
 
 @router.post("/login", response_model=Token)
 def login(form_data: OAuth2PasswordRequestForm = Depends()):
@@ -326,6 +407,10 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()):
             conexao.close()
 
 
+# ==========================================================
+# RECUPERAR SENHA
+# ==========================================================
+
 @router.post("/recuperar-senha")
 def recuperar_senha(dados: SolicitarRecuperacaoSenha):
     conexao = None
@@ -408,6 +493,10 @@ def recuperar_senha(dados: SolicitarRecuperacaoSenha):
         if conexao is not None and conexao.is_connected():
             conexao.close()
 
+
+# ==========================================================
+# REDEFINIR SENHA
+# ==========================================================
 
 @router.post("/redefinir-senha")
 def redefinir_senha(dados: RedefinirSenha):
@@ -511,12 +600,20 @@ def redefinir_senha(dados: RedefinirSenha):
             conexao.close()
 
 
+# ==========================================================
+# USUÁRIO LOGADO
+# ==========================================================
+
 @router.get("/me", response_model=UsuarioOut)
 def usuario_logado(
     usuario: UsuarioOut = Depends(obter_usuario_atual),
 ):
     return usuario
 
+
+# ==========================================================
+# ATUALIZAR DADOS DO CLIENTE
+# ==========================================================
 
 @router.put(
     "/clientes/me",
@@ -648,7 +745,7 @@ def atualizar_meus_dados(
             id=str(usuario.id),
             nome=dados.nome.strip(),
             telefone=dados.telefone,
-            email=dados.email,
+            email=novo_email,
             perfil="CLIENTE",
             status=True,
         )

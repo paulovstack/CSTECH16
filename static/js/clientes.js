@@ -17,9 +17,18 @@ document.addEventListener("DOMContentLoaded", () => {
     let submitting = false;
     let emailDisponivel = null;
     let emailVerificando = false;
+    let emailFalha = false;
     let emailTimer = null;
     let emailController = null;
     let emailRequisicao = 0;
+
+    const campos = [
+        cpfInput,
+        nomeInput,
+        telefoneInput,
+        emailInput,
+        senhaInput
+    ];
 
     function showMessage(text, type = "") {
         if (!message) return;
@@ -36,9 +45,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const numeros = limparNumeros(valor).slice(0, 11);
 
         if (numeros.length <= 3) return numeros;
+
         if (numeros.length <= 6) {
             return numeros.replace(/^(\d{3})(\d+)/, "$1.$2");
         }
+
         if (numeros.length <= 9) {
             return numeros.replace(/^(\d{3})(\d{3})(\d+)/, "$1.$2.$3");
         }
@@ -62,15 +73,19 @@ document.addEventListener("DOMContentLoaded", () => {
         return `(${numeros.slice(0, 2)}) ${numeros.slice(2, 7)}-${numeros.slice(7)}`;
     }
 
-    // Validação rigorosa do CPF, incluindo os dois dígitos verificadores.
+    // Validação rigorosa do CPF.
+    // Confere os dois dígitos verificadores.
     function validarCPF(valor) {
         const cpf = limparNumeros(valor);
 
         if (!/^\d{11}$/.test(cpf)) return false;
+
+        // Rejeita sequências com todos os números iguais.
         if (/^(\d)\1{10}$/.test(cpf)) return false;
 
         let soma = 0;
 
+        // Primeiro dígito verificador.
         for (let i = 0; i < 9; i++) {
             soma += Number(cpf[i]) * (10 - i);
         }
@@ -78,10 +93,13 @@ document.addEventListener("DOMContentLoaded", () => {
         let resto = (soma * 10) % 11;
         const digito1 = resto === 10 ? 0 : resto;
 
-        if (digito1 !== Number(cpf[9])) return false;
+        if (digito1 !== Number(cpf[9])) {
+            return false;
+        }
 
         soma = 0;
 
+        // Segundo dígito verificador.
         for (let i = 0; i < 10; i++) {
             soma += Number(cpf[i]) * (11 - i);
         }
@@ -192,6 +210,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!emailValido) {
             emailDisponivel = null;
+            emailFalha = false;
 
             atualizarEstadoCampo(
                 emailInput,
@@ -232,6 +251,16 @@ document.addEventListener("DOMContentLoaded", () => {
             return false;
         }
 
+        if (emailFalha) {
+            atualizarEstadoCampo(
+                emailInput,
+                false,
+                "Não foi possível verificar. Tente novamente."
+            );
+
+            return false;
+        }
+
         atualizarEstadoCampo(
             emailInput,
             null,
@@ -247,7 +276,10 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!validarEmail(email)) {
             emailDisponivel = null;
             emailVerificando = false;
+            emailFalha = false;
+
             atualizarCampoEmail();
+            atualizarBotao();
 
             return false;
         }
@@ -262,10 +294,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const requisicaoAtual = ++emailRequisicao;
-        emailController = new AbortController();
+        const controller = new AbortController();
 
+        emailController = controller;
         emailVerificando = true;
         emailDisponivel = null;
+        emailFalha = false;
 
         atualizarCampoEmail();
         atualizarBotao();
@@ -278,7 +312,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     headers: {
                         "Accept": "application/json"
                     },
-                    signal: emailController.signal
+                    signal: controller.signal
                 }
             );
 
@@ -286,7 +320,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (!response.ok) {
                 throw new Error(
-                    result.detail || "Não foi possível verificar o e-mail."
+                    typeof result.detail === "string"
+                        ? result.detail
+                        : "Não foi possível verificar o e-mail."
                 );
             }
 
@@ -294,9 +330,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 return false;
             }
 
-            emailDisponivel = result.disponivel === true;
+            if (typeof result.disponivel !== "boolean") {
+                throw new Error("Resposta inválida do servidor.");
+            }
 
-            atualizarCampoEmail();
+            emailDisponivel = result.disponivel;
 
             return emailDisponivel;
 
@@ -307,12 +345,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (requisicaoAtual === emailRequisicao) {
                 emailDisponivel = null;
-
-                atualizarEstadoCampo(
-                    emailInput,
-                    false,
-                    "Não foi possível verificar. Tente novamente."
-                );
+                emailFalha = true;
             }
 
             return false;
@@ -320,6 +353,8 @@ document.addEventListener("DOMContentLoaded", () => {
         } finally {
             if (requisicaoAtual === emailRequisicao) {
                 emailVerificando = false;
+                emailController = null;
+
                 atualizarCampoEmail();
                 atualizarBotao();
             }
@@ -329,6 +364,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function agendarVerificacaoEmail() {
         if (emailTimer) {
             clearTimeout(emailTimer);
+            emailTimer = null;
         }
 
         if (emailController) {
@@ -339,6 +375,7 @@ document.addEventListener("DOMContentLoaded", () => {
         emailRequisicao++;
         emailVerificando = false;
         emailDisponivel = null;
+        emailFalha = false;
 
         if (!validarEmail(emailInput.value)) {
             atualizarCampoEmail();
@@ -350,6 +387,7 @@ document.addEventListener("DOMContentLoaded", () => {
         atualizarBotao();
 
         emailTimer = setTimeout(() => {
+            emailTimer = null;
             verificarDisponibilidadeEmail();
         }, 500);
     }
@@ -376,7 +414,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 texto = valido
                     ? "CPF válido."
-                    : "Digite um CPF válido.";
+                    : "Digite um CPF válido com os dois dígitos verificadores.";
 
                 break;
 
@@ -416,24 +454,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function formularioValido() {
-        const nomeOk = validarCampo("nome", true);
-        const cpfOk = validarCampo("cpf", true);
-        const telefoneOk = validarCampo("telefone", true);
-        const emailOk = atualizarCampoEmail();
-        const senhaOk = atualizarSenha();
-
-        return nomeOk &&
-            cpfOk &&
-            telefoneOk &&
-            emailOk &&
-            senhaOk;
-    }
-
-    function atualizarBotao() {
-        if (!submitButton || submitting) return;
-
-        const valido =
-            validarNome(nomeInput.value) &&
+        return validarNome(nomeInput.value) &&
             validarCPF(cpfInput.value) &&
             (
                 !telefoneInput.value.trim() ||
@@ -443,19 +464,27 @@ document.addEventListener("DOMContentLoaded", () => {
             emailDisponivel === true &&
             !emailVerificando &&
             Object.values(regrasSenha(senhaInput.value)).every(Boolean);
-
-        submitButton.disabled = !valido;
     }
 
-    const campos = [
-        cpfInput,
-        nomeInput,
-        telefoneInput,
-        emailInput,
-        senhaInput
-    ];
+    function atualizarBotao() {
+        if (!submitButton || submitting) return;
+
+        submitButton.disabled = !formularioValido();
+    }
+
+    function bloquearCampos(bloquear) {
+        campos.forEach(input => {
+            input.disabled = bloquear;
+        });
+
+        if (submitButton) {
+            submitButton.disabled = bloquear;
+        }
+    }
 
     campos.forEach(input => {
+        atualizarEstadoCampo(input, null, "");
+
         input.addEventListener("blur", () => {
             touched.add(input.name);
 
@@ -520,11 +549,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Campos neutros até a primeira interação.
-    campos.forEach(input => {
-        atualizarEstadoCampo(input, null, "");
-    });
-
     form.addEventListener("submit", async event => {
         event.preventDefault();
 
@@ -535,12 +559,25 @@ document.addEventListener("DOMContentLoaded", () => {
             emailTimer = null;
         }
 
+        if (emailController) {
+            emailController.abort();
+            emailController = null;
+        }
+
+        emailRequisicao++;
+        emailDisponivel = null;
+        emailVerificando = false;
+        emailFalha = false;
+
         const nomeOk = validarCampo("nome", true);
         const cpfOk = validarCampo("cpf", true);
         const telefoneOk = validarCampo("telefone", true);
         const senhaOk = atualizarSenha();
+        const emailOk = validarEmail(emailInput.value);
 
-        if (!nomeOk || !cpfOk || !telefoneOk || !senhaOk) {
+        atualizarCampoEmail();
+
+        if (!nomeOk || !cpfOk || !telefoneOk || !senhaOk || !emailOk) {
             showMessage(
                 "Confira os campos destacados antes de continuar.",
                 "error"
@@ -552,9 +589,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 telefoneInput,
                 emailInput,
                 senhaInput
-            ].find(input =>
-                input.closest(".cad-field")?.classList.contains("is-invalid")
-            );
+            ].find(input => {
+                if (input === emailInput) {
+                    return !validarEmail(input.value);
+                }
+
+                return input.closest(".cad-field")
+                    ?.classList.contains("is-invalid");
+            });
 
             primeiroInvalido?.focus();
             atualizarBotao();
@@ -562,43 +604,36 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Consulta novamente o banco antes de cadastrar.
-        showMessage("Verificando disponibilidade do e-mail...");
-
-        const emailLivre = await verificarDisponibilidadeEmail();
-
-        if (!emailLivre) {
-            showMessage(
-                emailDisponivel === false
-                    ? "Este e-mail já está cadastrado. Utilize outro e-mail."
-                    : "Não foi possível verificar o e-mail. Tente novamente.",
-                "error"
-            );
-
-            emailInput.focus();
-            atualizarBotao();
-
-            return;
-        }
-
-        const data = {
-            cpf: limparNumeros(cpfInput.value),
-            nome: nomeInput.value.trim().replace(/\s+/g, " "),
-            telefone: limparNumeros(telefoneInput.value) || null,
-            email: emailInput.value.trim(),
-            senha: senhaInput.value
-        };
-
         submitting = true;
-
-        if (submitButton) {
-            submitButton.disabled = true;
-            submitButton.textContent = "Enviando cadastro...";
-        }
-
-        showMessage("Enviando cadastro...");
+        bloquearCampos(true);
 
         try {
+            showMessage("Verificando disponibilidade do e-mail...");
+
+            const emailLivre = await verificarDisponibilidadeEmail();
+
+            if (!emailLivre) {
+                showMessage(
+                    emailDisponivel === false
+                        ? "Este e-mail já está cadastrado. Utilize outro e-mail."
+                        : "Não foi possível verificar o e-mail. Tente novamente.",
+                    "error"
+                );
+
+                emailInput.focus();
+                return;
+            }
+
+            const data = {
+                cpf: limparNumeros(cpfInput.value),
+                nome: nomeInput.value.trim().replace(/\s+/g, " "),
+                telefone: limparNumeros(telefoneInput.value) || null,
+                email: emailInput.value.trim(),
+                senha: senhaInput.value
+            };
+
+            showMessage("Enviando cadastro...");
+
             const response = await fetch("/api/v1/auth/registrar", {
                 method: "POST",
                 headers: {
@@ -633,6 +668,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             emailDisponivel = null;
             emailVerificando = false;
+            emailFalha = false;
 
             campos.forEach(input => {
                 atualizarEstadoCampo(input, null, "");
@@ -663,11 +699,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         } finally {
             submitting = false;
-
-            if (submitButton) {
-                submitButton.textContent = "Criar cadastro";
-                atualizarBotao();
-            }
+            bloquearCampos(false);
+            atualizarBotao();
         }
     });
+
+    atualizarBotao();
 });
