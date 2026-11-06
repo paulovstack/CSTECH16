@@ -4,9 +4,13 @@
   <strong>Uma experiência de compra de tecnologia desenvolvida com Python e FastAPI.</strong>
 </p>
 
-<p align="center">
-  <img src="static/img/logo-cstech16.svg" alt="CSTECH16" width="220">
-</p>
+<table align="center" bgcolor="#ffffff" cellpadding="18">
+  <tr>
+    <td align="center">
+      <img src="static/img/logo-cstech16.svg" alt="CSTECH16" width="220">
+    </td>
+  </tr>
+</table>
 
 ---
 
@@ -21,6 +25,7 @@ O sistema contempla funcionalidades para clientes, funcionários e administrador
 ## 🚀 Funcionalidades
 
 ### 🛍️ Loja
+
 - Catálogo de produtos.
 - Pesquisa e filtragem de produtos.
 - Página de detalhes dos produtos.
@@ -30,6 +35,7 @@ O sistema contempla funcionalidades para clientes, funcionários e administrador
 - Avaliação de produtos com notas e comentários.
 
 ### 📦 Compras
+
 - Registro de pedidos.
 - Controle de estoque.
 - Diferentes formas de pagamento.
@@ -37,6 +43,7 @@ O sistema contempla funcionalidades para clientes, funcionários e administrador
 - Cancelamento de compras expiradas.
 
 ### 🔐 Administração
+
 - Gerenciamento de produtos.
 - Gerenciamento de funcionários.
 - Controle de pedidos.
@@ -45,6 +52,7 @@ O sistema contempla funcionalidades para clientes, funcionários e administrador
 - Histórico de vendas.
 
 ### 📊 Relatórios
+
 - Faturamento total.
 - Quantidade de unidades vendidas.
 - Pedidos concluídos.
@@ -63,7 +71,8 @@ O sistema contempla funcionalidades para clientes, funcionários e administrador
 | CSS3 | Estilização e responsividade |
 | JavaScript | Interatividade e integração com a API |
 | JWT | Autenticação baseada em tokens |
-| Git e GitHub | Versionamento e hospedagem do código |
+| Git | Controle de versão |
+| GitHub | Hospedagem do código-fonte |
 
 ## 📁 Estrutura do projeto
 
@@ -85,6 +94,7 @@ CSTECH16/
 ├── requirements.txt
 ├── .env.example
 ├── .gitignore
+├── README.md
 │
 └── static/
     ├── css/
@@ -105,7 +115,7 @@ CSTECH16/
 git clone https://github.com/paulovstack/CSTECH16.git
 ```
 
-### 2. Entre na pasta
+### 2. Entre na pasta do projeto
 
 ```bash
 cd CSTECH16
@@ -135,11 +145,11 @@ Crie um arquivo `.env` com base no `.env.example`.
 
 Configure as informações necessárias para conexão com o MySQL e autenticação da aplicação.
 
-**Não compartilhe seu `.env` nem publique credenciais no GitHub.**
+**Importante:** nunca compartilhe seu `.env`, senhas, tokens ou certificados privados no GitHub.
 
 ### 6. Configure o banco de dados
 
-Crie ou importe a estrutura do banco MySQL e configure os dados de conexão conforme as variáveis de ambiente da aplicação.
+Crie ou importe a estrutura do banco de dados MySQL e configure os dados de conexão conforme as variáveis de ambiente da aplicação.
 
 ### 7. Execute a aplicação
 
@@ -149,22 +159,44 @@ uvicorn main:app --reload
 
 A aplicação estará disponível em:
 
-- Loja/API: http://127.0.0.1:8000
-- Documentação Swagger: http://127.0.0.1:8000/docs
+- **Aplicação:** http://127.0.0.1:8000
+- **Documentação Swagger:** http://127.0.0.1:8000/docs
 
-## 🔗 API
+## 🔗 API REST
 
-A API utiliza endpoints organizados por módulos e disponibiliza documentação interativa através do Swagger UI.
+A API utiliza endpoints organizados por módulos, seguindo a estrutura do FastAPI.
 
-Acesse `/docs` para consultar as rotas disponíveis, visualizar parâmetros e realizar testes.
+A documentação interativa está disponível através do Swagger UI, permitindo consultar as rotas, visualizar parâmetros e realizar testes.
 
-## ☁️ Hospedagem
+Acesse:
 
-O projeto está preparado para publicação utilizando:
+```text
+/api/v1
+```
+
+E consulte a documentação completa em:
+
+```text
+/docs
+```
+
+## ☁️ Infraestrutura e hospedagem
+
+O projeto utiliza ou está sendo preparado para utilizar:
 
 - **GitHub:** versionamento e armazenamento do código-fonte.
 - **Render:** hospedagem da aplicação FastAPI.
 - **Aiven:** banco de dados MySQL.
+
+## 🎯 Objetivos do projeto
+
+- Desenvolver uma aplicação de e-commerce funcional.
+- Aplicar conceitos de desenvolvimento Back-End.
+- Trabalhar com APIs REST.
+- Implementar autenticação e controle de acesso.
+- Integrar uma aplicação Python com banco de dados MySQL.
+- Desenvolver interfaces web integradas à API.
+- Praticar versionamento de código com Git e GitHub.
 
 ## 👨‍💻 Desenvolvedor
 
@@ -172,7 +204,7 @@ O projeto está preparado para publicação utilizando:
 
 Estudante de Análise e Desenvolvimento de Sistemas.
 
-Desenvolvedor Back-End em formação, com interesse em Python, C#, APIs REST e Banco de Dados.
+Desenvolvedor Back-End em formação, com foco em Python, C#, APIs REST e Banco de Dados.
 
 - GitHub: [@paulovstack](https://github.com/paulovstack)
 
