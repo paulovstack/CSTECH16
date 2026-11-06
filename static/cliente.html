@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>CSTECH16 | Cadastro</title>
+
+    <link rel="stylesheet" href="/static/css/style.css">
+    <meta name="theme-color" content="#4357d5">
+    <link rel="icon" href="/static/img/icon.svg" type="image/svg+xml">
+    <link rel="icon" href="/static/img/favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="alternate icon" href="/static/favicon.ico">
+    <link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+    <link rel="manifest" href="/static/manifest.webmanifest">
+    <link rel="stylesheet" href="/static/css/cstech-ui.css?v=20261106-cs">
+</head>
+
+<body class="auth-page">
+
+    <main class="auth-card wide">
+
+        <!-- VOLTAR PARA O LOGIN -->
+        <a class="back-link" href="/static/index.html?v=20261106-cs">
+            ← Voltar ao login
+        </a>
+
+        <img class="cs-brand-icon" src="/static/img/icon.svg" alt="CSTECH16" width="56" height="56">
+
+        <p class="eyebrow">CSTECH16</p>
+
+        <h1>Criar conta</h1>
+
+        <p class="muted">
+            Preencha seus dados para se cadastrar como cliente.
+        </p>
+
+        <form id="cliente-form" class="form-grid">
+
+            <!-- CPF -->
+            <div>
+                <label for="cpf">CPF</label>
+
+                <input
+                    id="cpf"
+                    name="cpf"
+                    type="text"
+                    required
+                    maxlength="14"
+                    placeholder="000.000.000-00"
+                    inputmode="numeric"
+                    autocomplete="off"
+                    aria-describedby="cpf-help"
+                >
+
+                <small id="cpf-help">
+                    Informe um CPF válido com 11 números.
+                </small>
+            </div>
+
+            <!-- NOME -->
+            <div>
+                <label for="nome">Nome completo</label>
+
+                <input
+                    id="nome"
+                    name="nome"
+                    type="text"
+                    required
+                    autocomplete="name"
+                    placeholder="Seu nome completo"
+                >
+            </div>
+
+            <!-- CELULAR -->
+            <div>
+                <label for="telefone">Celular (opcional)</label>
+
+                <input
+                    id="telefone"
+                    name="telefone"
+                    type="tel"
+                    maxlength="15"
+                    placeholder="(00) 90000-0000"
+                    inputmode="numeric"
+                    autocomplete="tel"
+                    aria-describedby="telefone-help"
+                >
+
+                <small id="telefone-help">
+                    Se informar, digite o DDD e os 9 números do celular.
+                </small>
+            </div>
+
+            <!-- E-MAIL -->
+            <div>
+                <label for="cad-email">E-mail</label>
+
+                <input
+                    id="cad-email"
+                    name="email"
+                    type="email"
+                    required
+                    autocomplete="email"
+                    placeholder="voce@exemplo.com"
+                >
+            </div>
+
+            <!-- SENHA -->
+            <div class="span-2">
+                <label for="cad-senha">Senha</label>
+
+                <input
+                    id="cad-senha"
+                    name="senha"
+                    type="password"
+                    required
+                    minlength="6"
+                    autocomplete="new-password"
+                    placeholder="Crie uma senha segura"
+                    aria-describedby="cad-senha-help"
+                >
+
+                <small id="cad-senha-help">
+                    Mínimo de 6 caracteres, contendo:
+                    maiúscula, minúscula, número e caractere especial.
+                </small>
+            </div>
+
+            <!-- BOTÃO DE CADASTRO -->
+            <div class="span-2">
+
+                <button
+                    class="btn primary full"
+                    type="submit"
+                >
+                    Criar cadastro
+                </button>
+
+                <p
+                    id="cliente-message"
+                    class="message"
+                    role="status"
+                    aria-live="polite"
+                ></p>
+
+            </div>
+
+        </form>
+
+    </main>
+
+    <script src="/static/js/app.js?v=20261104-cstech16"></script>
+    <script src="/static/js/clientes.js?v=20261104-cstech16"></script>
+    <script src="/static/js/password-visibility.js?v=20261104-cstech16"></script>
+
+    <script src="/static/js/cstech-ui.js?v=20261106-cs" defer></script>
+</body>
+</html>

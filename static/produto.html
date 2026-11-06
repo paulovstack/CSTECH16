@@ -1,0 +1,49 @@
+<section id="product-reviews" class="cs-panel" hidden>
+    <h2>Avaliações dos clientes</h2>
+
+    <div class="reviews-summary">
+        <div class="reviews-average">
+            <strong id="reviews-average">0,0</strong>
+            <div id="reviews-average-stars" class="review-stars">☆☆☆☆☆</div>
+            <span id="reviews-count">Nenhuma avaliação</span>
+        </div>
+    </div>
+
+    <div id="reviews-list">
+        <p>Carregando avaliações...</p>
+    </div>
+
+    <div id="review-form-container" hidden>
+        <h3>Deixe sua avaliação</h3>
+
+        <form id="review-form">
+            <label for="review-rating">Sua nota</label>
+
+            <select id="review-rating" required>
+                <option value="">Selecione uma nota</option>
+                <option value="5">★★★★★ - Excelente</option>
+                <option value="4">★★★★☆ - Muito bom</option>
+                <option value="3">★★★☆☆ - Bom</option>
+                <option value="2">★★☆☆☆ - Regular</option>
+                <option value="1">★☆☆☆☆ - Ruim</option>
+            </select>
+
+            <label for="review-comment">Seu comentário</label>
+
+            <textarea
+                id="review-comment"
+                rows="4"
+                minlength="1"
+                maxlength="2000"
+                placeholder="Conte sua experiência com o produto..."
+                required
+            ></textarea>
+
+            <button type="submit" id="review-submit">
+                Enviar avaliação
+            </button>
+
+            <p id="review-feedback" role="status"></p>
+        </form>
+    </div>
+</section>

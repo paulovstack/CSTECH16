@@ -1,0 +1,298 @@
+
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSTECH16 | Gerenciar funcionários</title>
+
+    <meta name="theme-color" content="#4357d5">
+
+    <link rel="icon" href="/static/img/icon.svg" type="image/svg+xml">
+    <link rel="icon" href="/static/img/favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="alternate icon" href="/static/favicon.ico">
+    <link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+    <link rel="manifest" href="/static/manifest.webmanifest">
+
+    <link rel="stylesheet" href="/static/css/admin.css">
+    <link rel="stylesheet" href="/static/css/cstech-ui.css?v=20261106-cs">
+</head>
+
+<body class="premium-admin">
+
+<div class="app-shell">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <a class="side-brand" href="/static/dashboard.html?v=20261106-cs">
+            <img
+                src="/static/img/logo-cstech16-dark.svg"
+                alt="CSTECH16"
+                class="v4-side-logo"
+            >
+        </a>
+
+        <div class="v4-nav-label">PRINCIPAL</div>
+
+        <nav>
+            <a href="/static/dashboard.html?v=20261106-cs">
+                ▦ Dashboard
+            </a>
+
+            <a href="/static/produtos.html?v=20261106-cs">
+                ▣ Produtos
+            </a>
+
+            <a class="active"
+               href="/static/funcionarios.html?v=20261106-cs"
+               id="employee-nav">
+                ♙ Funcionários
+            </a>
+        </nav>
+
+        <div class="premium-side-caption">ACESSO RÁPIDO</div>
+
+        <a class="cs-store-btn" href="/static/loja.html?v=20261106-cs">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 9l1.5-5h13L20 9M4 9v11h16V9M4 9h16M9 20v-6h6v6"/>
+            </svg>
+            <span>Ir para a loja</span>
+        </a>
+
+        <button id="logout-button" class="btn ghost full" type="button">
+            Sair da conta
+        </button>
+
+    </aside>
+
+    <!-- CONTEÚDO -->
+    <main class="main-content">
+
+        <!-- CABEÇALHO -->
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">GESTÃO DE EQUIPE</p>
+                <h1>Funcionários</h1>
+                <p class="muted">
+                    Cadastre, consulte e gerencie os acessos da equipe.
+                </p>
+            </div>
+
+            <a class="btn secondary" href="/static/dashboard.html?v=20261106-cs">
+                ← Dashboard
+            </a>
+        </header>
+
+        <!-- ABAS -->
+        <section class="panel">
+
+            <div class="cs-tabs"
+                 role="tablist"
+                 aria-label="Gerenciamento de funcionários">
+
+                <button
+                    class="cs-tab is-on"
+                    type="button"
+                    role="tab"
+                    aria-selected="true"
+                    data-tab="cadastrar"
+                >
+                    + Cadastrar funcionário
+                </button>
+
+                <button
+                    class="cs-tab"
+                    type="button"
+                    role="tab"
+                    aria-selected="false"
+                    data-tab="consultar"
+                >
+                    ▤ Consultar / Editar
+                </button>
+
+                <span class="cs-tab-ind"></span>
+
+            </div>
+
+        </section>
+
+        <!-- ABA CADASTRAR -->
+        <section class="panel" data-panel="cadastrar">
+
+            <div class="panel-heading">
+                <div>
+                    <h2>Cadastrar funcionário</h2>
+                    <p class="muted">
+                        Preencha os dados para criar um novo acesso à equipe.
+                    </p>
+                </div>
+            </div>
+
+            <form id="funcionario-form" class="form-grid">
+
+                <div>
+                    <label for="f-nome">Nome completo</label>
+                    <input
+                        id="f-nome"
+                        name="nome"
+                        type="text"
+                        placeholder="Nome do funcionário"
+                        required
+                    >
+                </div>
+
+                <div>
+                    <label for="f-email">E-mail</label>
+                    <input
+                        id="f-email"
+                        name="email"
+                        type="email"
+                        placeholder="funcionario@email.com"
+                        required
+                    >
+                </div>
+
+                <div>
+                    <label for="f-senha">Senha de acesso</label>
+                    <input
+                        id="f-senha"
+                        name="senha"
+                        type="password"
+                        placeholder="Crie uma senha"
+                        required
+                    >
+                </div>
+
+                <div>
+                    <label for="f-status">Status da conta</label>
+                    <select id="f-status" name="status" required>
+                        <option value="true">Ativo</option>
+                        <option value="false">Inativo</option>
+                    </select>
+                </div>
+
+                <div class="span-2">
+                    <button class="btn primary" type="submit">
+                        Cadastrar funcionário
+                    </button>
+
+                    <p
+                        class="message"
+                        id="funcionario-message"
+                        role="status"
+                    ></p>
+                </div>
+
+            </form>
+
+        </section>
+
+        <!-- ABA CONSULTAR -->
+        <section class="panel cs-tab-off" data-panel="consultar">
+
+            <div class="panel-heading">
+
+                <div>
+                    <h2>Funcionários cadastrados</h2>
+                    <p class="muted">
+                        Consulte os usuários, altere informações e gerencie os acessos.
+                    </p>
+                </div>
+
+                <button
+                    class="btn secondary"
+                    id="refresh-employees"
+                    type="button"
+                >
+                    ↻ Atualizar
+                </button>
+
+            </div>
+
+            <!-- EDIÇÃO -->
+            <section id="employee-edit-panel" class="panel" hidden>
+
+                <div class="panel-heading">
+                    <div>
+                        <h2>Editar funcionário</h2>
+                        <p class="muted">
+                            Atualize os dados do funcionário selecionado.
+                        </p>
+                    </div>
+                </div>
+
+                <form id="employee-edit-form" class="form-grid">
+
+                    <div>
+                        <label for="edit-nome">Nome completo</label>
+                        <input
+                            id="edit-nome"
+                            name="nome"
+                            type="text"
+                            required
+                        >
+                    </div>
+
+                    <div>
+                        <label for="edit-email">E-mail</label>
+                        <input
+                            id="edit-email"
+                            name="email"
+                            type="email"
+                            required
+                        >
+                    </div>
+
+                    <div>
+                        <label for="edit-status">Status da conta</label>
+                        <select id="edit-status" name="status" required>
+                            <option value="true">Ativo</option>
+                            <option value="false">Inativo</option>
+                        </select>
+                    </div>
+
+                    <div class="span-2">
+
+                        <button class="btn primary" type="submit">
+                            Salvar alterações
+                        </button>
+
+                        <button
+                            class="btn secondary"
+                            id="employee-cancel"
+                            type="button"
+                        >
+                            Cancelar
+                        </button>
+
+                        <p
+                            class="message"
+                            id="employee-edit-message"
+                            role="status"
+                        ></p>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+            <!-- LISTAGEM -->
+            <div class="table-wrap" id="employees-content">
+                Carregando funcionários...
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="/static/js/app.js"></script>
+<script src="/static/js/funcionarios.js"></script>
+<script src="/static/js/cstech-ui.js?v=20261106-cs" defer></script>
+<script src="/static/js/cstech-admin.js?v=20261106-cs" defer></script>
+
+</body>
+</html>

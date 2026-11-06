@@ -1,0 +1,713 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="theme-color" content="#10131b"/>
+
+    <title>CSTECH16 | Loja de Tecnologia</title>
+
+    <link href="/static/css/style.css" rel="stylesheet"/>
+    <link href="/static/css/electro-design.css?v=20261104-cstech16" rel="stylesheet"/>
+
+    <style>
+        .v4-head-actions [hidden] {
+            display: none !important;
+        }
+
+        .v4-head-actions a,
+        .v4-head-actions button {
+            visibility: visible;
+        }
+
+        .v4-head-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .v4-head-actions button {
+            cursor: pointer;
+        }
+
+        .v4-head-actions a {
+            text-decoration: none;
+        }
+
+        .store-modal[hidden] {
+            display: none !important;
+        }
+
+        .store-message:empty,
+        #cart-message:empty {
+            display: none;
+        }
+
+        button:focus-visible,
+        a:focus-visible,
+        input:focus-visible,
+        select:focus-visible {
+            outline: 2px solid #8b9cff;
+            outline-offset: 3px;
+        }
+
+        /* =====================================
+           BARRA UNIFICADA DO CATÁLOGO
+        ===================================== */
+
+        .store-toolbar-unified {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            width: 100%;
+            padding: 12px;
+            margin-top: 22px;
+            border: 1px solid rgba(255,255,255,.09);
+            border-radius: 13px;
+            background: rgba(255,255,255,.025);
+        }
+
+        /* Busca */
+        .store-toolbar-unified .store-search {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 180px;
+            margin: 0;
+        }
+
+        .store-toolbar-unified .store-search .icon {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            color: #9296a5;
+        }
+
+        .store-toolbar-unified .store-search input {
+            width: 100%;
+            min-width: 0;
+            height: 40px;
+            padding: 0;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: inherit;
+            font: inherit;
+            box-shadow: none;
+        }
+
+        .store-toolbar-unified .store-search input::placeholder {
+            color: #9296a5;
+        }
+
+        /* Grupo de filtros */
+        .store-filter-group {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .store-filter-group select {
+            min-width: 145px;
+            height: 40px;
+            padding: 0 30px 0 12px;
+            border: 1px solid rgba(255,255,255,.10);
+            border-radius: 8px;
+            background-color: #171923;
+            color: inherit;
+            font: inherit;
+            font-size: 13px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .store-filter-group select:focus {
+            border-color: #7546d8;
+        }
+
+        /* Botão atualizar */
+        .store-filter-group .store-refresh {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            min-width: 34px;
+            height: 34px;
+            padding: 0;
+            border: none;
+            border-radius: 7px;
+            background: transparent;
+            color: #9296a5;
+            opacity: .7;
+            cursor: pointer;
+            transition: .2s ease;
+        }
+
+        .store-filter-group .store-refresh .icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        .store-filter-group .store-refresh:hover {
+            background: #7546d8;
+            color: #fff;
+            opacity: 1;
+        }
+
+        /* Quantidade de produtos */
+        .store-results-info {
+            display: flex;
+            justify-content: flex-end;
+            margin: 10px 3px 18px;
+            color: #9296a5;
+            font-size: 12px;
+        }
+
+        /* Responsividade */
+        @media (max-width: 900px) {
+            .store-toolbar-unified {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .store-toolbar-unified .store-search {
+                width: 100%;
+            }
+
+            .store-filter-group {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                width: 100%;
+            }
+
+            .store-filter-group select {
+                width: 100%;
+                min-width: 0;
+            }
+
+            .store-filter-group .store-refresh {
+                width: 100%;
+                height: 40px;
+                border: 1px solid rgba(255,255,255,.10);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .store-toolbar-unified {
+                padding: 10px;
+            }
+
+            .store-filter-group {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .store-filter-group select {
+                font-size: 12px;
+            }
+        }
+    </style>
+
+    <meta name="theme-color" content="#4357d5">
+    <link rel="icon" href="/static/img/icon.svg" type="image/svg+xml">
+    <link rel="icon" href="/static/img/favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="alternate icon" href="/static/favicon.ico">
+    <link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+    <link rel="manifest" href="/static/manifest.webmanifest">
+    <link rel="stylesheet" href="/static/css/cstech-ui.css?v=20261106-cs">
+</head>
+
+<body class="store-page">
+
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+    <!-- AVISO SUPERIOR -->
+    <div class="v4-announcement">
+        <span>CSTECH16 • Tecnologia ao seu alcance</span>
+        <span>Novidades em tecnologia, reunidas para você</span>
+    </div>
+
+    <!-- CABEÇALHO -->
+    <header class="v4-header">
+        <div class="v4-header-main">
+
+            <a class="v4-logo" href="/static/loja.html?v=20261106-cs" aria-label="Página inicial CSTECH16">
+                <img src="/static/img/logo-cstech16.svg?v=20261106-cs" alt="CSTECH16"/>
+            </a>
+
+            <div class="v4-search" role="search">
+                <input
+                    type="search"
+                    id="v4-search"
+                    aria-label="Buscar produtos"
+                    placeholder="Buscar produtos, marcas e categorias..."
+                />
+
+                <button type="button" id="v4-search-btn" aria-label="Buscar" aria-controls="catalogo">
+                    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+                        <circle cx="11" cy="11" r="7"></circle>
+                        <path d="m20 20-4-4"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="v4-head-actions">
+
+                <a href="/static/index.html?v=20261106-cs" id="store-login-link">
+                    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+                        <circle cx="12" cy="8" r="4"></circle>
+                        <path d="M4 21a8 8 0 0 1 16 0"></path>
+                    </svg>
+                    <span>Entrar</span>
+                </a>
+
+                <a href="/static/minha-conta.html?v=20261106-cs" id="store-account-link" hidden>
+                    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+                        <circle cx="12" cy="8" r="4"></circle>
+                        <path d="M4 21a8 8 0 0 1 16 0"></path>
+                    </svg>
+                    <span>Minha conta</span>
+                </a>
+
+                <a href="/static/minhas-compras.html?v=20261106-cs" id="store-purchases-link" hidden>
+                    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+                        <path d="M6 3h12l2 18H4L6 3Z"></path>
+                        <path d="M9 7a3 3 0 0 1 6 0"></path>
+                    </svg>
+                    <span>Minhas compras</span>
+                </a>
+
+                <a href="/static/dashboard.html?v=20261106-cs" id="voltar-dashboard" hidden>
+                    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+                        <rect x="3" y="3" width="8" height="8" rx="2"></rect>
+                        <rect x="13" y="3" width="8" height="5" rx="2"></rect>
+                        <rect x="13" y="10" width="8" height="11" rx="2"></rect>
+                        <rect x="3" y="13" width="8" height="8" rx="2"></rect>
+                    </svg>
+                    <span>Painel</span>
+                </a>
+
+                <button id="store-cart-button" type="button" aria-label="Abrir carrinho, 0 itens" aria-expanded="false">
+                    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+                        <path d="M3 4h2l2.2 11.2a2 2 0 0 0 2 1.6h8.9a2 2 0 0 0 2-1.6L22 8H6"></path>
+                        <circle cx="10" cy="21" r="1"></circle>
+                        <circle cx="19" cy="21" r="1"></circle>
+                    </svg>
+                    <span>Carrinho</span>
+                    <b id="store-cart-count">0</b>
+                </button>
+
+                <button id="store-logout" data-logout type="button" hidden>Sair</button>
+
+            </div>
+        </div>
+
+        <!-- NAVEGAÇÃO -->
+        <nav class="v4-nav" aria-label="Navegação principal">
+
+            <a class="v4-all" href="#categorias">
+                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+                    <path d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+                Todas as categorias
+            </a>
+
+            <a href="/static/loja.html?v=20261106-cs">Início</a>
+            <a href="#catalogo">Produtos</a>
+            <a href="#categorias">Categorias</a>
+            <a href="#catalogo">Ofertas</a>
+            <a href="#catalogo">Novidades</a>
+            <a href="#rodape">Contato</a>
+
+        </nav>
+    </header>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="store-main" id="conteudo">
+
+        <!-- DEPARTAMENTOS E DESTAQUE -->
+        <section class="v4-hero-layout">
+
+            <aside class="v4-departments" aria-label="Departamentos">
+
+                <h2>Navegue por departamento</h2>
+                <p class="department-note">Encontre rapidamente o que procura.</p>
+
+                <a href="#catalogo" data-filter-category="Smartphones">
+                    <span class="department-dot" aria-hidden="true"></span>
+                    <span>Smartphones</span>
+                    <span class="department-arrow" aria-hidden="true">›</span>
+                </a>
+
+                <a href="#catalogo" data-filter-category="Notebooks">
+                    <span class="department-dot" aria-hidden="true"></span>
+                    <span>Notebooks</span>
+                    <span class="department-arrow" aria-hidden="true">›</span>
+                </a>
+
+                <a href="#catalogo" data-filter-category="Áudio">
+                    <span class="department-dot" aria-hidden="true"></span>
+                    <span>Áudio</span>
+                    <span class="department-arrow" aria-hidden="true">›</span>
+                </a>
+
+                <a href="#catalogo" data-filter-category="Acessórios">
+                    <span class="department-dot" aria-hidden="true"></span>
+                    <span>Acessórios</span>
+                    <span class="department-arrow" aria-hidden="true">›</span>
+                </a>
+
+                <a href="#catalogo" data-filter-category="Smartwatches">
+                    <span class="department-dot" aria-hidden="true"></span>
+                    <span>Smartwatches</span>
+                    <span class="department-arrow" aria-hidden="true">›</span>
+                </a>
+
+                <a href="#catalogo" data-filter-category="Monitores">
+                    <span class="department-dot" aria-hidden="true"></span>
+                    <span>Monitores</span>
+                    <span class="department-arrow" aria-hidden="true">›</span>
+                </a>
+
+                <a href="#catalogo" data-filter-category="Games">
+                    <span class="department-dot" aria-hidden="true"></span>
+                    <span>Games</span>
+                    <span class="department-arrow" aria-hidden="true">›</span>
+                </a>
+
+            </aside>
+
+            <!-- BANNER PRINCIPAL -->
+            <section class="v4-hero cs-slider" role="region" aria-roledescription="carousel" aria-label="Destaques da CSTECH16">
+
+                <article class="cs-slide" style="--tint:#26356a" role="group" aria-roledescription="slide" aria-label="1 de 5">
+                    <div class="v4-hero-text">
+                        <span class="v4-eyebrow">TECNOLOGIA PARA VOCÊ</span>
+                        <h1>Tech que <em>transforma</em> sua vida.</h1>
+                        <p>Explore eletrônicos, acessórios e novidades para o seu dia a dia.</p>
+                        <a href="#catalogo">Explorar produtos →</a>
+                    </div>
+                    <img src="/static/img/hero-tech.webp" alt="Seleção de equipamentos de tecnologia" decoding="async" fetchpriority="high">
+                </article>
+
+                <article class="cs-slide" style="--tint:#2a4d9b" role="group" aria-roledescription="slide" aria-label="2 de 5">
+                    <div class="v4-hero-text">
+                        <span class="v4-eyebrow">NOTEBOOKS</span>
+                        <h1>Leveza que <em>acelera</em> o seu trabalho.</h1>
+                        <p>Notebooks para estudar, criar e programar em qualquer lugar.</p>
+                        <a href="#catalogo" data-filter-category="Notebooks">Ver notebooks →</a>
+                    </div>
+                    <img src="/static/img/notebook-air.webp" alt="Notebook em destaque" decoding="async" loading="lazy">
+                </article>
+
+                <article class="cs-slide" style="--tint:#3b3a9e" role="group" aria-roledescription="slide" aria-label="3 de 5">
+                    <div class="v4-hero-text">
+                        <span class="v4-eyebrow">SMARTPHONES</span>
+                        <h1>O futuro cabe na <em>sua mão</em>.</h1>
+                        <p>Os smartphones mais desejados, reunidos em um só lugar.</p>
+                        <a href="#catalogo" data-filter-category="Smartphones">Ver smartphones →</a>
+                    </div>
+                    <img src="/static/img/smartphone-nova.webp" alt="Smartphone em destaque" decoding="async" loading="lazy">
+                </article>
+
+                <article class="cs-slide" style="--tint:#1f5a8a" role="group" aria-roledescription="slide" aria-label="4 de 5">
+                    <div class="v4-hero-text">
+                        <span class="v4-eyebrow">ÁUDIO</span>
+                        <h1>Ouça cada <em>detalhe</em>.</h1>
+                        <p>Fones e acessórios de áudio para o seu dia a dia.</p>
+                        <a href="#catalogo" data-filter-category="Áudio">Ver áudio →</a>
+                    </div>
+                    <img src="/static/img/fone-studio.webp" alt="Fone de ouvido em destaque" decoding="async" loading="lazy">
+                </article>
+
+                <article class="cs-slide" style="--tint:#2f4f9a" role="group" aria-roledescription="slide" aria-label="5 de 5">
+                    <div class="v4-hero-text">
+                        <span class="v4-eyebrow">SMARTWATCHES</span>
+                        <h1>Seu dia, <em>no pulso</em>.</h1>
+                        <p>Smartwatches para acompanhar tudo de perto.</p>
+                        <a href="#catalogo" data-filter-category="Smartwatches">Ver smartwatches →</a>
+                    </div>
+                    <img src="/static/img/smartwatch-pulse.webp" alt="Smartwatch em destaque" decoding="async" loading="lazy">
+                </article>
+
+                <div class="cs-slider-ui">
+                    <button type="button" class="cs-pp" aria-label="Pausar slides"></button>
+                    <div class="cs-dots" role="group" aria-label="Escolher slide"></div>
+                    <span class="cs-count" aria-hidden="true"></span>
+                </div>
+
+                <div class="cs-arrows">
+                    <button type="button" class="cs-prev" aria-label="Slide anterior">
+                        <svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>
+                    </button>
+                    <button type="button" class="cs-next" aria-label="Próximo slide">
+                        <svg viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+                    </button>
+                </div>
+
+            </section>
+        </section>
+
+        <!-- VANTAGENS -->
+        <section class="cs-promo-strip" aria-label="Recursos da loja">
+
+            <div>
+                <span class="promo-icon" aria-hidden="true">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="m4 7 8-4 8 4-8 4-8-4Z"></path>
+                        <path d="M4 7v10l8 4 8-4V7M12 11v10"></path>
+                    </svg>
+                </span>
+                <span>
+                    <strong>Produtos selecionados</strong>
+                    <small>Descubra novidades</small>
+                </span>
+            </div>
+
+            <div>
+                <span class="promo-icon" aria-hidden="true">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <circle cx="11" cy="11" r="7"></circle>
+                        <path d="m20 20-4-4"></path>
+                    </svg>
+                </span>
+                <span>
+                    <strong>Busca intuitiva</strong>
+                    <small>Encontre com facilidade</small>
+                </span>
+            </div>
+
+            <div>
+                <span class="promo-icon" aria-hidden="true">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M4 7 12 3l8 4-8 4-8-4Z"></path>
+                        <path d="M4 7v10l8 4 8-4V7M12 11v10"></path>
+                    </svg>
+                </span>
+                <span>
+                    <strong>Catálogo organizado</strong>
+                    <small>Filtros por categoria</small>
+                </span>
+            </div>
+
+            <div>
+                <span class="promo-icon" aria-hidden="true">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M6 7h12l1 14H5L6 7Z"></path>
+                        <path d="M9 7a3 3 0 0 1 6 0"></path>
+                    </svg>
+                </span>
+                <span>
+                    <strong>Carrinho simples</strong>
+                    <small>Revise seus itens</small>
+                </span>
+            </div>
+
+        </section>
+
+        <!-- CATEGORIAS -->
+        <section class="premium-categories" id="categorias">
+
+            <div class="premium-section-title">
+                <div>
+                    <span>CATEGORIAS</span>
+                    <h2>Encontre por categoria</h2>
+                </div>
+
+                <a href="#catalogo">Ver todos os produtos ↗</a>
+            </div>
+
+            <div
+                class="premium-category-list"
+                id="premium-category-list"
+                role="group"
+                aria-label="Categorias disponíveis"
+                aria-busy="true"
+            ></div>
+
+        </section>
+
+        <!-- CATÁLOGO -->
+        <section class="store-catalog" id="catalogo">
+
+            <div class="store-section-head">
+                <div>
+                    <p class="store-kicker">DESCUBRA O CATÁLOGO</p>
+                    <h2>Produtos em destaque<span class="accent-dot">.</span></h2>
+                    <p>Encontre tecnologia para cada necessidade.</p>
+                </div>
+            </div>
+
+            <!-- BARRA UNIFICADA -->
+            <div class="store-toolbar store-toolbar-unified">
+
+                <label class="store-search">
+                    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+                        <circle cx="11" cy="11" r="7"></circle>
+                        <path d="m20 20-4-4"></path>
+                    </svg>
+
+                    <input
+                        type="search"
+                        id="store-search"
+                        aria-label="Buscar produtos no catálogo"
+                        placeholder="Buscar produto ou marca..."
+                    />
+                </label>
+
+                <div class="store-filter-group">
+
+                    <select id="store-category" aria-label="Filtrar por categoria">
+                        <option value="">Todas as categorias</option>
+                        <option value="Smartphones">Smartphones</option>
+                        <option value="Notebooks">Notebooks</option>
+                        <option value="Áudio">Áudio</option>
+                        <option value="Acessórios">Acessórios</option>
+                        <option value="Smartwatches">Smartwatches</option>
+                        <option value="Monitores">Monitores</option>
+                        <option value="Games">Games</option>
+                    </select>
+
+                    <select id="store-brand" aria-label="Filtrar por marca">
+                        <option value="">Todas as marcas</option>
+                    </select>
+
+                    <select id="store-sort" aria-label="Ordenar produtos">
+                        <option value="default">Ordenar: padrão</option>
+                        <option value="lowest">Menor preço</option>
+                        <option value="highest">Maior preço</option>
+                        <option value="name">Nome (A–Z)</option>
+                    </select>
+
+                    <button
+                        class="store-refresh"
+                        id="store-refresh"
+                        type="button"
+                        title="Atualizar produtos"
+                        aria-label="Atualizar produtos"
+                    >
+                        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+                            <path d="M20 7v5h-5"></path>
+                            <path d="M4 17v-5h5"></path>
+                            <path d="M5.6 9a7 7 0 0 1 11.7-2L20 12M4 12l2.7 5a7 7 0 0 0 11.7-2"></path>
+                        </svg>
+                    </button>
+
+                </div>
+            </div>
+
+            <!-- QUANTIDADE DE PRODUTOS -->
+            <div class="store-results-info">
+                <span
+                    class="store-count"
+                    id="store-count"
+                    role="status"
+                    aria-live="polite"
+                >
+                    Carregando...
+                </span>
+            </div>
+
+            <!-- MENSAGEM DO CATÁLOGO -->
+            <p class="store-message" id="store-message" role="status" aria-live="polite"></p>
+
+            <!-- PRODUTOS -->
+            <div
+                class="store-grid"
+                id="store-products"
+                role="region"
+                aria-label="Resultados do catálogo"
+                aria-busy="true"
+            >
+                <div class="store-loading">
+                    Carregando produtos...
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- MODAL DE DETALHES DO PRODUTO -->
+    <div class="store-modal" id="store-modal" hidden>
+
+        <div class="store-modal-backdrop" data-close-modal></div>
+
+        <section
+            class="store-modal-card"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="store-modal-title"
+            aria-describedby="store-modal-description"
+            tabindex="-1"
+        >
+
+            <button class="store-modal-close" type="button" aria-label="Fechar" data-close-modal>
+                ×
+            </button>
+
+            <div id="store-modal-content"></div>
+
+        </section>
+    </div>
+
+    <!-- MODAL DO CARRINHO -->
+    <div class="store-modal" id="cart-modal" hidden>
+
+        <div class="store-modal-backdrop" data-close-cart></div>
+
+        <section
+            class="store-modal-card cart-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="cart-title"
+        >
+
+            <button class="store-modal-close" type="button" aria-label="Fechar" data-close-cart>
+                ×
+            </button>
+
+            <h2 id="cart-title">Meu carrinho</h2>
+
+            <div id="cart-items" aria-live="polite" aria-relevant="additions text"></div>
+
+            <div class="cart-total" aria-live="polite">
+                Total:
+                <strong id="cart-total">R$ 0,00</strong>
+            </div>
+
+            <button class="btn primary" id="cart-checkout" type="button">
+                Finalizar compra
+            </button>
+
+            <p class="message" id="cart-message" role="status" aria-live="polite"></p>
+
+        </section>
+    </div>
+
+    <!-- RODAPÉ -->
+    <footer class="store-footer" id="rodape">
+
+        <img
+            class="cs-brand-icon sm"
+            src="/static/img/icon.svg"
+            alt="CSTECH16"
+            width="34"
+            height="34"
+        >
+
+        <strong>CSTECH16</strong>
+
+        <span>
+            Tecnologia ao seu alcance • CSTECH16
+        </span>
+
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script src="/static/js/app.js?v=20261104-cstech16"></script>
+    <script src="/static/js/v4.js?v=20261104-cstech16"></script>
+    <script src="/static/js/loja.js?v=20261104-cstech16"></script>
+    <script src="/static/js/cstech-ui.js?v=20261106-cs" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CSTECH16 | Diagnóstico</title>
+<link rel="icon" href="/static/img/icon.svg" type="image/svg+xml">
+<style>body{font:15px/1.5 Inter,system-ui,sans-serif;background:#f5f7fb;color:#172033;margin:0;padding:32px 16px}main{max-width:760px;margin:auto;background:#fff;border:1px solid #e3e8f1;border-radius:20px;padding:28px;box-shadow:0 20px 60px rgba(30,43,74,.08)}h1{margin:0 0 4px;font-size:24px}p{color:#687487;margin:4px 0 18px}table{width:100%;border-collapse:collapse}td,th{padding:9px 6px;border-bottom:1px solid #eef1f6;text-align:left;font-size:14px}.ok{color:#18794e;font-weight:700}.bad{color:#b42318;font-weight:700}.warn{color:#b26a00;font-weight:700}code{background:#f0f2f8;padding:2px 6px;border-radius:6px}#res{margin-top:18px;padding:14px;border-radius:12px;background:#eef1ff;font-weight:600}</style></head>
+<body><main><h1>Diagnóstico CSTECH16</h1><p>Mostra o que o seu servidor entrega de verdade e se o navegador está usando cópia antiga.</p>
+<p>Endereço: <code id="origin"></code></p>
+<table><thead><tr><th>Arquivo</th><th>No servidor</th><th>No navegador</th></tr></thead><tbody id="rows"></tbody></table>
+<div id="res">Verificando…</div></main>
+<script>
+const checks=[
+ ['loja.html','cs-slider','Loja nova (carrossel)'],
+ ['dashboard.html','cs-store-btn','Dashboard novo'],
+ ['produtos.html','cs-store-btn','Produtos novo'],
+ ['funcionarios.html','cs-store-btn','Funcionários novo'],
+ ['index.html','cs-brand-icon','Login novo'],
+ ['css/cstech-ui.css','cs-slider','CSS novo (cstech-ui.css)'],
+ ['js/cstech-ui.js','carrossel','JS novo (cstech-ui.js)'],
+ ['img/logo-cstech16.svg','CSTECH','Logo novo']];
+document.getElementById('origin').textContent=location.origin;
+const tb=document.getElementById('rows');let bad=0,cache=0;
+async function get(p,opt){try{const r=await fetch('/static/'+p+(opt.q||''),opt.o);if(!r.ok)return null;return await r.text()}catch(e){return null}}
+(async()=>{for(const [p,m,l] of checks){
+ const fresh=await get(p,{q:'?t='+Date.now(),o:{cache:'no-store'}});
+ const cached=await get(p,{o:{}});
+ const f=fresh===null?'ausente':fresh.includes(m)?'novo':'ANTIGO';
+ const c=cached===null?'ausente':cached.includes(m)?'novo':'ANTIGO';
+ if(f!=='novo')bad++;else if(c!=='novo')cache++;
+ const cls=x=>x==='novo'?'ok':'bad';
+ tb.insertAdjacentHTML('beforeend',`<tr><td>${l}<br><small>/static/${p}</small></td><td class="${cls(f)}">${f}</td><td class="${f==='novo'&&c!=='novo'?'warn':cls(c)}">${f==='novo'&&c!=='novo'?'cópia antiga em cache':c}</td></tr>`)}
+ document.getElementById('res').textContent=bad?`${bad} arquivo(s) estão ANTIGOS ou ausentes no servidor: a pasta servida não é a que você atualizou, ou faltou copiar esses arquivos.`:cache?'O servidor está certo, mas o navegador usa cópia antiga: pressione Ctrl+Shift+Delete, limpe o cache, ou teste em janela anônima.':'Tudo novo e sem cache antigo. Se a loja antiga ainda abrir, o desvio está numa rota do backend (main.py).';
+})();
+</script></body></html>

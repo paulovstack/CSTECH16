@@ -1,0 +1,550 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CSTECH16 | Dashboard</title>
+    <link rel="stylesheet" href="/static/css/admin.css">
+    <meta name="theme-color" content="#4357d5">
+    <link rel="icon" href="/static/img/icon.svg" type="image/svg+xml">
+    <link rel="icon" href="/static/img/favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="alternate icon" href="/static/favicon.ico">
+    <link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+    <link rel="manifest" href="/static/manifest.webmanifest">
+    <link rel="stylesheet" href="/static/css/cstech-ui.css?v=20261106-cs">
+</head>
+
+<body class="premium-admin">
+
+<div class="app-shell">
+
+    <!-- MENU LATERAL -->
+    <aside class="sidebar">
+        <a class="side-brand" href="/static/dashboard.html?v=20261106-cs"><img src="/static/img/logo-cstech16-dark.svg" alt="CSTECH16" class="v4-side-logo"></a>
+        <div class="v4-nav-label">PRINCIPAL</div>
+        <nav>
+            <a class="active" href="/static/dashboard.html?v=20261106-cs">▦ Dashboard</a>
+            <a href="/static/produtos.html?v=20261106-cs">▣ Produtos</a>
+            <a href="/static/funcionarios.html?v=20261106-cs" id="employee-nav">♙ Funcionários</a>
+        </nav>
+        <div class="premium-side-caption">ACESSO RÁPIDO</div>
+        <a class="cs-store-btn" href="/static/loja.html?v=20261106-cs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9l1.5-5h13L20 9M4 9v11h16V9M4 9h16M9 20v-6h6v6"/></svg><span>Ir para a loja</span></a>
+        <button id="logout-button" class="btn ghost full" type="button">Sair da conta</button>
+    </aside>
+
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="main-content">
+
+        <!-- CABEÇALHO -->
+        <header class="topbar">
+
+            <div>
+                <p class="eyebrow">
+                    PAINEL DE CONTROLE / VISÃO GERAL
+                </p>
+
+                <h1>
+                    Visão geral
+                    <span class="premium-blue-dot">●</span>
+                </h1>
+            </div>
+
+            <div class="user-chip" id="user-chip">
+                Carregando...
+            </div>
+
+        </header>
+
+
+        <!-- BOAS-VINDAS -->
+        <section class="premium-welcome">
+
+            <div>
+                <p class="eyebrow">SEU PAINEL DE GESTÃO</p>
+
+                <h2 id="welcome-title">Olá!</h2>
+
+                <p>
+                    Acompanhe o desempenho do catálogo
+                    e gerencie sua operação.
+                </p>
+            </div>
+
+            <span class="premium-status">
+                ● Informações do catálogo atualizadas pela API
+            </span>
+
+        </section>
+
+
+        <!-- INDICADORES DO ESTOQUE -->
+        <nav class="cs-tabs" role="tablist" aria-label="Seções do dashboard">
+            <span class="cs-tab-ind" aria-hidden="true"></span>
+            <button type="button" class="cs-tab is-on" role="tab" data-tab="principal"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Principal</button>
+            <button type="button" class="cs-tab" role="tab" data-tab="desempenho" data-admin hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l5-5 4 4 8-9"/><path d="M15 7h5v5"/></svg>Desempenho</button>
+            <button type="button" class="cs-tab" role="tab" data-tab="historico" data-admin hidden><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Histórico de vendas</button>
+        </nav>
+
+        <section class="premium-metrics" data-panel="principal">
+
+            <article>
+                <span class="metric-icon blue">▣</span>
+                <small>Produtos cadastrados</small>
+                <strong id="metric-products">—</strong>
+                <span class="metric-foot">Itens no catálogo</span>
+            </article>
+
+            <article>
+                <span class="metric-icon green">◈</span>
+                <small>Unidades em estoque</small>
+                <strong id="metric-stock">—</strong>
+                <span class="metric-foot">Soma das quantidades</span>
+            </article>
+
+            <article>
+                <span class="metric-icon orange">△</span>
+                <small>Produtos sem estoque</small>
+                <strong id="metric-out">—</strong>
+                <span class="metric-foot">Precisam de atenção</span>
+            </article>
+
+            <article>
+                <span class="metric-icon purple">＄</span>
+                <small>Valor do estoque</small>
+                <strong id="metric-value">—</strong>
+                <span class="metric-foot">
+                    Estimativa pelo preço de venda
+                </span>
+            </article>
+
+        </section>
+
+
+        <!-- ANÁLISE DO ESTOQUE -->
+        <section class="premium-analytics" data-panel="principal">
+
+            <article class="premium-analytics-card">
+
+                <div class="premium-analytics-head">
+                    <div>
+                        <h3>Visão do estoque</h3>
+                        <p>
+                            Distribuição dos produtos por disponibilidade
+                        </p>
+                    </div>
+
+                    <span>AO VIVO</span>
+                </div>
+
+                <div class="premium-stock-bars">
+
+                    <div>
+                        <span>Disponíveis</span>
+                        <strong id="available-count">—</strong>
+                    </div>
+
+                    <div class="premium-progress">
+                        <i id="available-progress"></i>
+                    </div>
+
+                    <div>
+                        <span>Sem estoque</span>
+                        <strong id="empty-count">—</strong>
+                    </div>
+
+                    <div class="premium-progress empty">
+                        <i id="empty-progress"></i>
+                    </div>
+
+                </div>
+
+                <p class="premium-chart-note">
+                    Indicadores calculados a partir dos produtos cadastrados na API.
+                </p>
+
+            </article>
+
+
+            <article class="premium-analytics-card">
+
+                <div class="premium-analytics-head">
+                    <div>
+                        <h3>Produtos por categoria</h3>
+                        <p>Distribuição do catálogo</p>
+                    </div>
+                </div>
+
+                <div
+                    id="premium-category-chart"
+                    class="premium-donut-wrap"
+                >
+                    <div class="premium-donut"></div>
+
+                    <div class="premium-donut-legend">
+                        Carregando categorias...
+                    </div>
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- RELATÓRIOS COMERCIAIS - ADMIN -->
+        <section id="admin-sales-section" hidden>
+
+            <div class="premium-section-heading" data-panel="principal">
+
+                <div>
+                    <p class="eyebrow">
+                        DESEMPENHO DA OPERAÇÃO
+                    </p>
+
+                    <h2>Visão comercial</h2>
+
+                    <p>
+                        Acompanhe os resultados das vendas da CSTECH16.
+                    </p>
+                </div>
+
+                <span class="premium-status">
+                    ● Dados da API
+                </span>
+
+            </div>
+
+
+            <!-- INDICADORES FINANCEIROS -->
+            <section class="premium-metrics sales-metrics" data-panel="principal">
+
+                <article>
+                    <span class="metric-icon green">＄</span>
+                    <small>Faturamento total</small>
+                    <strong id="sales-revenue">—</strong>
+                    <span class="metric-foot">Vendas concluídas</span>
+                </article>
+
+                <article>
+                    <span class="metric-icon blue">▣</span>
+                    <small>Unidades vendidas</small>
+                    <strong id="sales-units">—</strong>
+                    <span class="metric-foot">
+                        Produtos comercializados
+                    </span>
+                </article>
+
+                <article>
+                    <span class="metric-icon purple">◈</span>
+                    <small>Pedidos concluídos</small>
+                    <strong id="sales-orders">—</strong>
+                    <span class="metric-foot">Compras finalizadas</span>
+                </article>
+
+                <article>
+                    <span class="metric-icon orange">＄</span>
+                    <small>Ticket médio</small>
+                    <strong id="sales-ticket">—</strong>
+                    <span class="metric-foot">Média por pedido</span>
+                </article>
+
+            </section>
+
+
+            <!-- GRÁFICO DE VENDAS -->
+            <article class="premium-analytics-card sales-chart-section" data-panel="desempenho">
+
+                <div class="premium-analytics-head">
+                    <div>
+                        <h3>Desempenho de vendas</h3>
+                        <p>
+                            Evolução do faturamento ao longo do período.
+                        </p>
+                    </div>
+
+                    <span>RELATÓRIO</span>
+                </div>
+
+                <!-- FILTROS DO GRÁFICO -->
+                <div class="sales-chart-filters">
+
+                    <div class="filter-group">
+                        <label for="chart-start-date">
+                            Data inicial
+                        </label>
+
+                        <input
+                            type="date"
+                            id="chart-start-date"
+                        >
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="chart-end-date">
+                            Data final
+                        </label>
+
+                        <input
+                            type="date"
+                            id="chart-end-date"
+                        >
+                    </div>
+
+                    <button
+                        type="button"
+                        class="btn primary"
+                        id="filter-sales-chart"
+                    >
+                        Filtrar
+                    </button>
+
+                </div>
+
+
+                <!-- RESUMO DO PERÍODO -->
+                <div class="sales-chart-summary">
+
+                    <div>
+                        <span>Faturamento no período</span>
+                        <strong id="chart-total-revenue">
+                            R$ 0,00
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Pedidos</span>
+                        <strong id="chart-total-orders">0</strong>
+                    </div>
+
+                    <div>
+                        <span>Unidades vendidas</span>
+                        <strong id="chart-total-units">0</strong>
+                    </div>
+
+                </div>
+
+
+                <!-- ÁREA DO GRÁFICO -->
+                <div class="sales-chart-container">
+
+                    <p
+                        id="sales-chart-message"
+                        role="status"
+                    >
+                        Carregando dados de vendas...
+                    </p>
+
+                    <svg
+                        id="sales-chart"
+                        viewBox="0 0 800 320"
+                        preserveAspectRatio="xMidYMid meet"
+                        role="img"
+                        aria-label="Gráfico de faturamento diário"
+                    ></svg>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUTOS MAIS VENDIDOS -->
+            <article class="premium-analytics-card sales-ranking" data-panel="principal">
+
+                <div class="premium-analytics-head">
+                    <div>
+                        <h3>Produtos mais vendidos</h3>
+                        <p>
+                            Ranking baseado nas compras concluídas.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="table-wrap">
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Produto</th>
+                                <th>Unidades</th>
+                                <th>Pedidos</th>
+                                <th>Valor arrecadado</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="sales-ranking-body">
+                            <tr>
+                                <td colspan="4">
+                                    Carregando produtos...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </article>
+
+
+            <!-- HISTÓRICO DE COMPRAS -->
+            <article class="premium-analytics-card sales-history" data-panel="historico">
+
+                <div class="premium-analytics-head">
+                    <div>
+                        <h3>Histórico de compras</h3>
+                        <p>
+                            Consulte e filtre as movimentações da loja.
+                        </p>
+                    </div>
+                </div>
+
+
+                <!-- FILTROS -->
+                <div class="sales-filters">
+
+                    <select id="history-status">
+                        <option value="">Todos os status</option>
+                        <option value="CONCLUIDA">Concluídas</option>
+                        <option value="PENDENTE">Pendentes</option>
+                        <option value="CANCELADA">Canceladas</option>
+                    </select>
+
+                    <input
+                        type="date"
+                        id="history-start"
+                        aria-label="Data inicial"
+                    >
+
+                    <input
+                        type="date"
+                        id="history-end"
+                        aria-label="Data final"
+                    >
+
+                    <button
+                        type="button"
+                        class="btn primary"
+                        id="filter-history"
+                    >
+                        Filtrar
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn ghost"
+                        id="clear-history"
+                    >
+                        Limpar
+                    </button>
+
+                </div>
+
+
+                <!-- TABELA -->
+                <div class="table-wrap">
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Compra</th>
+                                <th>Cliente</th>
+                                <th>Produto</th>
+                                <th>Quantidade</th>
+                                <th>Valor unitário</th>
+                                <th>Status</th>
+                                <th>Data</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="sales-history-body">
+                            <tr>
+                                <td colspan="7">
+                                    Carregando histórico...
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <p
+                    id="history-message"
+                    class="message"
+                    role="status"
+                ></p>
+
+            </article>
+
+        </section>
+
+
+        <!-- ATIVIDADE -->
+        <section class="v4-activity" data-panel="principal">
+
+            <div>
+                <h3>Atalhos para sua operação</h3>
+
+                <p>
+                    Gerencie produtos e acompanhe o estoque pelo painel.
+                </p>
+            </div>
+
+            <span>CSTECH16 · Gestão de catálogo</span>
+
+        </section>
+
+
+        <!-- ATALHOS -->
+        <section class="premium-actions" data-panel="principal">
+
+            <div>
+                <h3>Gerenciamento rápido</h3>
+                <p>Escolha uma área para continuar.</p>
+            </div>
+
+            <div class="premium-action-links">
+
+                <a href="/static/produtos.html?v=20261106-cs">
+                    ▣ &nbsp; Gerenciar produtos
+                    <span>↗</span>
+                </a>
+
+                <a
+                    id="employee-link"
+                    href="/static/funcionarios.html?v=20261106-cs"
+                >
+                    ♙ &nbsp; Funcionários
+                    <span>↗</span>
+                </a>
+
+                <a href="/static/loja.html?v=20261106-cs">
+                    ◈ &nbsp; Ir para a loja
+                    <span>↗</span>
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <div id="employee-card" hidden></div>
+
+        <p
+            id="dashboard-message"
+            class="message"
+            role="status"
+        ></p>
+
+    </main>
+
+</div>
+
+
+<script src="/static/js/app.js"></script>
+<script src="/static/js/dashboard.js"></script>
+
+    <script src="/static/js/cstech-ui.js?v=20261106-cs" defer></script>
+    <script src="/static/js/cstech-admin.js?v=20261106-cs" defer></script>
+</body>
+</html>

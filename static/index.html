@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#101114">
+
+    <title>CSTECH16 | Entrar</title>
+
+    <link rel="stylesheet" href="/static/css/style.css">
+    <meta name="theme-color" content="#4357d5">
+    <link rel="icon" href="/static/img/icon.svg" type="image/svg+xml">
+    <link rel="icon" href="/static/img/favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="alternate icon" href="/static/favicon.ico">
+    <link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+    <link rel="manifest" href="/static/manifest.webmanifest">
+    <link rel="stylesheet" href="/static/css/cstech-ui.css?v=20261106-cs">
+</head>
+
+<body class="auth-page">
+
+    <main class="auth-card">
+
+        <!-- VOLTAR PARA A LOJA -->
+        <a
+            href="/static/loja.html?v=20261106-cs"
+            class="auth-back"
+            style="display: inline-block; margin-bottom: 22px; text-decoration: none;"
+        >
+            ← Voltar para a loja
+        </a>
+
+        <img class="cs-brand-icon" src="/static/img/icon.svg" alt="CSTECH16" width="56" height="56">
+
+        <p class="eyebrow">CSTECH16</p>
+
+        <h1>Bem-vindo(a)</h1>
+
+        <p class="muted">
+            Entre na sua conta para continuar.
+        </p>
+
+        <form id="login-form">
+
+            <label for="email">E-mail</label>
+
+            <input
+                id="email"
+                name="username"
+                type="email"
+                autocomplete="username"
+                required
+                placeholder="voce@exemplo.com"
+            >
+
+            <label for="senha">Senha</label>
+
+            <input
+                id="senha"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                required
+                placeholder="Sua senha"
+            >
+
+            <div class="auth-options">
+
+                <!-- RECUPERAÇÃO NA MESMA ABA -->
+                <a href="/static/recuperar-senha.html?v=20261106-cs">
+                    Esqueci minha senha
+                </a>
+
+            </div>
+
+            <button type="submit" class="btn primary full">
+                Entrar
+            </button>
+
+            <p
+                id="login-message"
+                class="message"
+                role="status"
+                aria-live="polite"
+            ></p>
+
+        </form>
+
+        <p class="auth-foot">
+            Ainda não tem conta?
+            <a href="/static/cliente.html?v=20261106-cs">Cadastre-se</a>
+        </p>
+
+    </main>
+
+    <script src="/static/js/app.js?v=20261104-cstech16"></script>
+    <script src="/static/js/password-visibility.js?v=20261104-cstech16"></script>
+
+    <script src="/static/js/cstech-ui.js?v=20261106-cs" defer></script>
+</body>
+</html>

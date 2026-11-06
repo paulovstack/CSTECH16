@@ -1,0 +1,238 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>CSTECH16 | Recuperar senha</title>
+
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <style>
+        .recovery-card {
+            width: 100%;
+            max-width: 430px;
+        }
+
+        .recovery-token {
+            padding: 15px;
+            margin: 18px 0;
+            border: 1px dashed #b99a58;
+            border-radius: 8px;
+            text-align: center;
+            overflow-wrap: anywhere;
+        }
+
+        .recovery-token strong {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .recovery-section {
+            display: none;
+        }
+
+        .recovery-section.active {
+            display: block;
+        }
+
+        .recovery-section input {
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 14px;
+        }
+
+        .recovery-back {
+            display: block;
+            margin-top: 18px;
+            text-align: center;
+        }
+    </style>
+    <meta name="theme-color" content="#4357d5">
+    <link rel="icon" href="/static/img/icon.svg" type="image/svg+xml">
+    <link rel="icon" href="/static/img/favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="alternate icon" href="/static/favicon.ico">
+    <link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+    <link rel="manifest" href="/static/manifest.webmanifest">
+    <link rel="stylesheet" href="/static/css/cstech-ui.css?v=20261106-cs">
+</head>
+
+<body class="auth-page">
+
+    <main class="auth-card recovery-card">
+
+        <img class="cs-brand-icon" src="/static/img/icon.svg" alt="CSTECH16" width="56" height="56">
+
+        <p class="eyebrow">CSTECH16</p>
+
+        <!-- ETAPA 1 -->
+        <section id="recovery-email-section" class="recovery-section active">
+
+            <h1>Recuperar senha</h1>
+
+            <p class="muted">
+                Informe o e-mail cadastrado para iniciar a recuperação.
+            </p>
+
+            <form id="recovery-email-form">
+
+                <label for="recovery-email">E-mail</label>
+
+                <input
+                    id="recovery-email"
+                    type="email"
+                    autocomplete="email"
+                    required
+                    placeholder="voce@exemplo.com"
+                >
+
+                <button
+                    type="submit"
+                    class="btn primary full"
+                    id="request-token-button"
+                >
+                    Solicitar recuperação
+                </button>
+
+            </form>
+
+            <p id="recovery-email-message" class="message" role="status" aria-live="polite"></p>
+
+        </section>
+
+        <!-- ETAPA 2 -->
+        <section id="recovery-token-section" class="recovery-section">
+
+            <h1>Verifique seu e-mail</h1>
+
+            <p class="muted">
+                Esta é uma simulação do recebimento do e-mail de recuperação.
+            </p>
+
+            <div class="recovery-token">
+
+                <strong>Token demonstrativo:</strong>
+
+                <span id="demo-token"></span>
+
+                <button
+                    type="button"
+                    id="copy-token-button"
+                    class="btn primary full"
+                    style="margin-top: 12px;"
+                >
+                    Copiar token
+                </button>
+
+            </div>
+
+            <p class="muted">
+                O token expira em 15 minutos e só pode ser utilizado uma vez.
+            </p>
+
+            <button
+                type="button"
+                id="continue-recovery-button"
+                class="btn primary full"
+            >
+                Continuar
+            </button>
+
+        </section>
+
+        <!-- ETAPA 3 -->
+        <section id="recovery-password-section" class="recovery-section">
+
+            <h1>Nova senha</h1>
+
+            <p class="muted">
+                Informe o token e cadastre sua nova senha.
+            </p>
+
+            <form id="recovery-password-form">
+
+                <label for="recovery-token">Token de recuperação</label>
+
+                <input
+                    id="recovery-token"
+                    type="text"
+                    autocomplete="one-time-code"
+                    required
+                    placeholder="Cole seu token"
+                >
+
+                <label for="new-password">Nova senha</label>
+
+                <input
+                    id="new-password"
+                    type="password"
+                    minlength="6"
+                    autocomplete="new-password"
+                    required
+                    placeholder="Mínimo de 6 caracteres"
+                >
+
+                <label for="confirm-password">Confirmar senha</label>
+
+                <input
+                    id="confirm-password"
+                    type="password"
+                    minlength="6"
+                    autocomplete="new-password"
+                    required
+                    placeholder="Digite novamente"
+                >
+
+                <button
+                    type="submit"
+                    class="btn primary full"
+                    id="reset-password-button"
+                >
+                    Redefinir senha
+                </button>
+
+            </form>
+
+            <p id="recovery-password-message" class="message" role="status" aria-live="polite"></p>
+
+        </section>
+
+        <!-- ETAPA 4 -->
+        <section id="recovery-success-section" class="recovery-section">
+
+            <h1>Senha alterada!</h1>
+
+            <p class="muted">
+                Sua senha foi atualizada com sucesso.
+                Você já pode entrar na sua conta.
+            </p>
+
+            <a
+                id="finish-recovery-button"
+                href="/static/index.html?v=20261106-cs"
+                class="btn primary full"
+                style="display: block; text-align: center; box-sizing: border-box; text-decoration: none;"
+            >
+                Voltar para o login
+            </a>
+
+        </section>
+
+        <!-- VOLTAR PARA O LOGIN -->
+        <a
+            href="/static/index.html?v=20261106-cs"
+            class="recovery-back"
+        >
+            ← Voltar para o login
+        </a>
+
+    </main>
+
+    <script src="/static/js/recuperar-senha.js?v=20261104-cstech16"></script>
+    <script src="/static/js/password-visibility.js?v=20261104-cstech16"></script>
+
+    <script src="/static/js/cstech-ui.js?v=20261106-cs" defer></script>
+</body>
+</html>

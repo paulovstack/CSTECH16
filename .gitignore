@@ -1,0 +1,33 @@
+
+# Ambientes virtuais
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Configurações e segredos
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+certs/
+
+# Banco de dados e backups
+*.sql
+*.sqlite3
+*.db
+
+# Editor
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+teste_conexao.py
+criar_adm.py
