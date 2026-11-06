@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -16,13 +15,13 @@
     <link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
     <link rel="manifest" href="/static/manifest.webmanifest">
     <link rel="stylesheet" href="/static/css/cstech-ui.css?v=20261106-cs">
+    <link rel="stylesheet" href="/static/css/cadastro-validacao.css?v=20261106-1">
 </head>
 
 <body class="auth-page">
 
     <main class="auth-card wide">
 
-        <!-- VOLTAR PARA O LOGIN -->
         <a class="back-link" href="/static/index.html?v=20261106-cs">
             ← Voltar ao login
         </a>
@@ -37,12 +36,10 @@
             Preencha seus dados para se cadastrar como cliente.
         </p>
 
-        <form id="cliente-form" class="form-grid">
+        <form id="cliente-form" class="form-grid" novalidate>
 
-            <!-- CPF -->
-            <div>
+            <div class="cad-field" data-field="cpf">
                 <label for="cpf">CPF</label>
-
                 <input
                     id="cpf"
                     name="cpf"
@@ -52,32 +49,29 @@
                     placeholder="000.000.000-00"
                     inputmode="numeric"
                     autocomplete="off"
-                    aria-describedby="cpf-help"
+                    aria-describedby="cpf-help cpf-status"
                 >
-
-                <small id="cpf-help">
-                    Informe um CPF válido com 11 números.
-                </small>
+                <small id="cpf-help">Informe um CPF válido com 11 números.</small>
+                <small id="cpf-status" class="cad-field-status" aria-live="polite"></small>
             </div>
 
-            <!-- NOME -->
-            <div>
+            <div class="cad-field" data-field="nome">
                 <label for="nome">Nome completo</label>
-
                 <input
                     id="nome"
                     name="nome"
                     type="text"
                     required
+                    minlength="3"
                     autocomplete="name"
                     placeholder="Seu nome completo"
+                    aria-describedby="nome-status"
                 >
+                <small id="nome-status" class="cad-field-status" aria-live="polite"></small>
             </div>
 
-            <!-- CELULAR -->
-            <div>
+            <div class="cad-field" data-field="telefone">
                 <label for="telefone">Celular (opcional)</label>
-
                 <input
                     id="telefone"
                     name="telefone"
@@ -86,18 +80,14 @@
                     placeholder="(00) 90000-0000"
                     inputmode="numeric"
                     autocomplete="tel"
-                    aria-describedby="telefone-help"
+                    aria-describedby="telefone-help telefone-status"
                 >
-
-                <small id="telefone-help">
-                    Se informar, digite o DDD e os 9 números do celular.
-                </small>
+                <small id="telefone-help">Se informar, digite o DDD e os 9 números do celular.</small>
+                <small id="telefone-status" class="cad-field-status" aria-live="polite"></small>
             </div>
 
-            <!-- E-MAIL -->
-            <div>
+            <div class="cad-field" data-field="email">
                 <label for="cad-email">E-mail</label>
-
                 <input
                     id="cad-email"
                     name="email"
@@ -105,13 +95,13 @@
                     required
                     autocomplete="email"
                     placeholder="voce@exemplo.com"
+                    aria-describedby="email-status"
                 >
+                <small id="email-status" class="cad-field-status" aria-live="polite"></small>
             </div>
 
-            <!-- SENHA -->
-            <div class="span-2">
+            <div class="span-2 cad-field cad-password-field" data-field="senha">
                 <label for="cad-senha">Senha</label>
-
                 <input
                     id="cad-senha"
                     name="senha"
@@ -120,32 +110,29 @@
                     minlength="6"
                     autocomplete="new-password"
                     placeholder="Crie uma senha segura"
-                    aria-describedby="cad-senha-help"
+                    aria-describedby="cad-senha-help senha-requirements"
                 >
 
                 <small id="cad-senha-help">
-                    Mínimo de 6 caracteres, contendo:
-                    maiúscula, minúscula, número e caractere especial.
+                    A senha precisa atender a todos os requisitos abaixo.
                 </small>
+
+                <ul id="senha-requirements" class="password-requirements" aria-label="Requisitos da senha">
+                    <li data-rule="length"><span class="requirement-icon" aria-hidden="true">×</span> Pelo menos 6 caracteres</li>
+                    <li data-rule="uppercase"><span class="requirement-icon" aria-hidden="true">×</span> Uma letra maiúscula</li>
+                    <li data-rule="lowercase"><span class="requirement-icon" aria-hidden="true">×</span> Uma letra minúscula</li>
+                    <li data-rule="number"><span class="requirement-icon" aria-hidden="true">×</span> Pelo menos um número</li>
+                    <li data-rule="special"><span class="requirement-icon" aria-hidden="true">×</span> Um caractere especial</li>
+                </ul>
+                <small id="senha-status" class="cad-field-status" aria-live="polite"></small>
             </div>
 
-            <!-- BOTÃO DE CADASTRO -->
-            <div class="span-2">
-
-                <button
-                    class="btn primary full"
-                    type="submit"
-                >
+            <div class="span-2 cad-submit-area">
+                <button class="btn primary full" type="submit" disabled>
                     Criar cadastro
                 </button>
 
-                <p
-                    id="cliente-message"
-                    class="message"
-                    role="status"
-                    aria-live="polite"
-                ></p>
-
+                <p id="cliente-message" class="message" role="status" aria-live="polite"></p>
             </div>
 
         </form>
@@ -153,9 +140,8 @@
     </main>
 
     <script src="/static/js/app.js?v=20261104-cstech16"></script>
-    <script src="/static/js/clientes.js?v=20261104-cstech16"></script>
+    <script src="/static/js/clientes.js?v=20261106-validacao1"></script>
     <script src="/static/js/password-visibility.js?v=20261104-cstech16"></script>
-
     <script src="/static/js/cstech-ui.js?v=20261106-cs" defer></script>
 </body>
 </html>

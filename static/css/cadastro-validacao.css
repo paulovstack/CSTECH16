@@ -1,0 +1,112 @@
+/* CSTECH16 - validação interativa do cadastro */
+#cliente-form .cad-field {
+    min-width: 0;
+}
+
+#cliente-form .cad-field input {
+    border: 1.5px solid #d7deeb;
+    transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+
+#cliente-form .cad-field input:focus {
+    outline: none;
+}
+
+#cliente-form .cad-field.is-neutral input {
+    border-color: #d7deeb;
+}
+
+#cliente-form .cad-field.is-valid input {
+    border-color: #16a36a !important;
+    background: #f5fcf8;
+    box-shadow: 0 0 0 3px rgba(22, 163, 106, .10);
+}
+
+#cliente-form .cad-field.is-invalid input {
+    border-color: #dc4545 !important;
+    background: #fff8f8;
+    box-shadow: 0 0 0 3px rgba(220, 69, 69, .09);
+}
+
+#cliente-form .cad-field-status {
+    display: block;
+    min-height: 16px;
+    margin-top: 5px;
+    font-size: 11px;
+    line-height: 1.4;
+    font-weight: 650;
+}
+
+#cliente-form .cad-field.is-valid .cad-field-status {
+    color: #12805a;
+}
+
+#cliente-form .cad-field.is-invalid .cad-field-status {
+    color: #c62828;
+}
+
+#cliente-form .cad-field.is-neutral .cad-field-status {
+    color: #8793a8;
+}
+
+#cliente-form .password-requirements {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 12px;
+    list-style: none;
+    padding: 12px;
+    margin: 10px 0 2px;
+    border: 1px solid #e4e9f2;
+    border-radius: 13px;
+    background: #f8f9fc;
+}
+
+#cliente-form .password-requirements li {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #bd3434;
+    font-size: 12px;
+    line-height: 1.4;
+    font-weight: 650;
+    transition: color .2s ease;
+}
+
+#cliente-form .password-requirements .requirement-icon {
+    display: inline-grid;
+    place-items: center;
+    flex: 0 0 19px;
+    width: 19px;
+    height: 19px;
+    border-radius: 50%;
+    background: #fdeaea;
+    color: #c62828;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+#cliente-form .password-requirements li.is-met {
+    color: #12805a;
+}
+
+#cliente-form .password-requirements li.is-met .requirement-icon {
+    background: #dcf5e8;
+    color: #12805a;
+}
+
+#cliente-form .cad-submit-area .btn:disabled {
+    opacity: .52;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+#cliente-form .cad-submit-area .btn:not(:disabled) {
+    opacity: 1;
+}
+
+@media (max-width: 560px) {
+    #cliente-form .password-requirements {
+        grid-template-columns: 1fr;
+    }
+}

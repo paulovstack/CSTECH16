@@ -6,7 +6,7 @@ import secrets
 from datetime import datetime, timedelta
 
 import mysql.connector
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 from fastapi.security import OAuth2PasswordRequestForm
 
 from config import ACCESS_TOKEN_EXPIRE_MINUTES
@@ -34,6 +34,70 @@ router = APIRouter(
     prefix="/api/v1/auth",
     tags=["Autenticação"]
 )
+
+
+@router.get("/verificar-email")
+def verificar_disponibilidade_email(
+    email: str = Query(..., min_length=5, max_length=254),
+):
+    conexao = None
+    cursor = None
+
+    try:
+        conexao = conectar_banco()
+        cursor = conexao.cursor(dictionary=True)
+
+        cursor.execute(
+            """
+            SELECT cpf
+            FROM clientes
+            WHERE email = %s
+            LIMIT 1
+            """,
+            (email.strip(),),
+        )
+
+        if cursor.fetchone():
+            return {
+                "disponivel": False,
+                "mensagem": "Este e-mail já está cadastrado."
+            }
+
+        cursor.execute(
+            """
+            SELECT id_funcionario
+            FROM funcionario
+            WHERE email = %s
+            LIMIT 1
+            """,
+            (email.strip(),),
+        )
+
+        if cursor.fetchone():
+            return {
+                "disponivel": False,
+                "mensagem": "Este e-mail já está em uso."
+            }
+
+        return {
+            "disponivel": True,
+            "mensagem": "E-mail disponível!"
+        }
+
+    except mysql.connector.Error:
+        logger.exception("Erro ao verificar disponibilidade do e-mail")
+
+        raise HTTPException(
+            status_code=500,
+            detail="Não foi possível verificar a disponibilidade do e-mail."
+        )
+
+    finally:
+        if cursor is not None:
+            cursor.close()
+
+        if conexao is not None and conexao.is_connected():
+            conexao.close()
 
 
 @router.post(
